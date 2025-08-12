@@ -237,7 +237,7 @@ export default function Index() {
             >
               Start Free Today
               <ArrowRight className="w-5 h-5 ml-2" />
-            </Link>
+            </button>
           )}
         </div>
       </section>

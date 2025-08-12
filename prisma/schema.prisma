@@ -118,12 +118,12 @@ model RoomSession {
   roomId            String
   gameSession       GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
   gameSessionId     String
-  status            SessionStatus  @default(WAITING)
+  status            String         @default("WAITING")
   currentQuestion   Int            @default(0)
   startedAt         DateTime?
   endedAt           DateTime?
   createdAt         DateTime       @default(now())
-  
+
   @@map("room_sessions")
 }
 
@@ -133,11 +133,11 @@ model AuditLog {
   action            String
   resource          String
   resourceId        String?
-  metadata          Json?
+  metadata          String?
   ipAddress         String?
   userAgent         String?
   createdAt         DateTime       @default(now())
-  
+
   @@map("audit_logs")
 }
 

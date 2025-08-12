@@ -291,7 +291,7 @@ router.get('/:gameId', authenticate, async (req: AuthRequest, res) => {
       gameId: gameSession.id,
       title: gameSession.title,
       gameType: gameSession.gameType,
-      gameData: gameSession.gameData,
+      gameData: JSON.parse(gameSession.gameData),
       isCompleted: gameSession.isCompleted,
       upload: gameSession.upload,
       lastScore: gameSession.scores[0] || null,

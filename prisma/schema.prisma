@@ -54,15 +54,15 @@ model GameSession {
   user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String
   title             String
-  gameType          GameType       @default(INTERACTIVE)
-  gameData          Json
+  gameType          String         @default("INTERACTIVE")
+  gameData          String
   isCompleted       Boolean        @default(false)
   completedAt       DateTime?
   createdAt         DateTime       @default(now())
-  
+
   scores            Score[]
   roomSessions      RoomSession[]
-  
+
   @@map("game_sessions")
 }
 

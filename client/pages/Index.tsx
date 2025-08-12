@@ -102,7 +102,7 @@ export default function Index() {
               Into Interactive Games
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Upload your PDFs, documents, or URLs and watch AI create engaging roleplay simulations 
+              Upload your PDFs, Word documents, PowerPoint presentations, or URLs and watch AI create engaging roleplay simulations
               and quizzes that make learning fun, memorable, and effective.
             </p>
             

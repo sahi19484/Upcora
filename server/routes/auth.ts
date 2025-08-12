@@ -25,6 +25,7 @@ const loginSchema = z.object({
 // Sign up
 router.post('/signup', async (req, res) => {
   try {
+    console.log('Signup attempt for:', req.body.email);
     const { email, password, name } = signupSchema.parse(req.body);
 
     const existingUser = await prisma.user.findUnique({
@@ -32,6 +33,7 @@ router.post('/signup', async (req, res) => {
     });
 
     if (existingUser) {
+      console.log('User already exists:', email);
       return res.status(400).json({ error: 'User already exists' });
     }
 

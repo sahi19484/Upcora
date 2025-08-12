@@ -78,9 +78,9 @@ model Score {
   correctAnswers    Int
   totalQuestions    Int
   xpEarned          Int            @default(0)
-  badges            String[]       @default([])
+  badges            String         @default("")
   createdAt         DateTime       @default(now())
-  
+
   @@map("scores")
 }
 

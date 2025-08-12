@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String         @id @default(cuid())
+  email             String         @unique
+  passwordHash      String
+  name              String?
+  role              Role           @default(USER)
+  xp                Int            @default(0)
+  level             Int            @default(1)
+  badges            String[]       @default([])
+  streakDays        Int            @default(0)
+  lastActiveAt      DateTime       @default(now())
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  uploads           Upload[]
+  scores            Score[]
+  gameSessions      GameSession[]
+  rooms             RoomMember[]
+  
+  @@map("users")
+}
+
+model Upload {
+  id                String         @id @default(cuid())
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  fileName          String
+  fileUrl           String
+  fileType          String
+  originalText      String?
+  extractedText     String?
+  processedAt       DateTime?
+  isProcessed       Boolean        @default(false)
+  createdAt         DateTime       @default(now())
+  
+  gameSessions      GameSession[]
+  
+  @@map("uploads")
+}
+
+model GameSession {
+  id                String         @id @default(cuid())
+  upload            Upload         @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  uploadId          String
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  title             String
+  gameType          GameType       @default(INTERACTIVE)
+  gameData          Json
+  isCompleted       Boolean        @default(false)
+  completedAt       DateTime?
+  createdAt         DateTime       @default(now())
+  
+  scores            Score[]
+  roomSessions      RoomSession[]
+  
+  @@map("game_sessions")
+}
+
+model Score {
+  id                String         @id @default(cuid())
+  gameSession       GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  gameSessionId     String
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  score             Int
+  maxScore          Int
+  timeSpent         Int            // in seconds
+  correctAnswers    Int
+  totalQuestions    Int
+  xpEarned          Int            @default(0)
+  badges            String[]       @default([])
+  createdAt         DateTime       @default(now())
+  
+  @@map("scores")
+}
+
+model Room {
+  id                String         @id @default(cuid())
+  name              String
+  code              String         @unique
+  maxPlayers        Int            @default(10)
+  isActive          Boolean        @default(true)
+  createdBy         String
+  createdAt         DateTime       @default(now())
+  
+  members           RoomMember[]
+  sessions          RoomSession[]
+  
+  @@map("rooms")
+}
+
+model RoomMember {
+  id                String         @id @default(cuid())
+  room              Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId            String
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  isHost            Boolean        @default(false)
+  joinedAt          DateTime       @default(now())
+  
+  @@unique([roomId, userId])
+  @@map("room_members")
+}
+
+model RoomSession {
+  id                String         @id @default(cuid())
+  room              Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId            String
+  gameSession       GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  gameSessionId     String
+  status            SessionStatus  @default(WAITING)
+  currentQuestion   Int            @default(0)
+  startedAt         DateTime?
+  endedAt           DateTime?
+  createdAt         DateTime       @default(now())
+  
+  @@map("room_sessions")
+}
+
+model AuditLog {
+  id                String         @id @default(cuid())
+  userId            String?
+  action            String
+  resource          String
+  resourceId        String?
+  metadata          Json?
+  ipAddress         String?
+  userAgent         String?
+  createdAt         DateTime       @default(now())
+  
+  @@map("audit_logs")
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum GameType {
+  INTERACTIVE
+  QUIZ_ONLY
+  ROLEPLAY_ONLY
+  MULTIPLAYER
+}
+
+enum SessionStatus {
+  WAITING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}

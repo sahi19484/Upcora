@@ -119,6 +119,8 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
 
       case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
       case 'application/vnd.ms-powerpoint':
+      case 'application/powerpoint':
+      case 'application/x-mspowerpoint':
         try {
           // For PPTX files, try to extract text from XML structure
           if (mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {

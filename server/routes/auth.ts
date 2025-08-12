@@ -68,10 +68,11 @@ router.post('/signup', async (req, res) => {
       token
     });
   } catch (error) {
+    console.error('Signup error details:', error);
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: 'Invalid input', details: error.errors });
     }
-    res.status(500).json({ error: 'Failed to create user' });
+    res.status(500).json({ error: 'Failed to create user', details: error.message });
   }
 });
 

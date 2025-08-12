@@ -1,6 +1,17 @@
-import pdf from 'pdf-parse';
-import mammoth from 'mammoth';
 import { z } from 'zod';
+
+// Dynamic imports to avoid bundling server-only dependencies in client
+let pdf: any;
+let mammoth: any;
+
+async function loadDependencies() {
+  if (!pdf) {
+    pdf = (await import('pdf-parse')).default;
+  }
+  if (!mammoth) {
+    mammoth = await import('mammoth');
+  }
+}
 
 export const ALLOWED_MIME_TYPES = [
   'application/pdf',

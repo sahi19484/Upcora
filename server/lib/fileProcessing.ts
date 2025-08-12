@@ -34,6 +34,8 @@ export interface ExtractedContent {
 }
 
 export async function extractTextFromFile(buffer: Buffer, fileName: string, mimeType: string): Promise<ExtractedContent> {
+  await loadDependencies();
+
   let text = '';
   let pages: number | undefined;
 
@@ -44,7 +46,7 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
         text = pdfData.text;
         pages = pdfData.numpages;
         break;
-        
+
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
         const docxResult = await mammoth.extractRawText({ buffer });

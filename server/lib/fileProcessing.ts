@@ -3,24 +3,48 @@ import { z } from 'zod';
 // Lazy loading of dependencies to avoid bundling issues
 let pdf: any;
 let mammoth: any;
+let pptx: any;
 
 async function loadDependencies() {
   try {
     if (!pdf) {
-      // Use dynamic import with error handling
-      const pdfModule = await import('pdf-parse');
-      pdf = pdfModule.default || pdfModule;
+      // Import pdf-parse with safer approach
+      try {
+        const pdfModule = await import('pdf-parse');
+        pdf = pdfModule.default || pdfModule;
+      } catch (pdfError) {
+        console.warn('PDF parsing unavailable:', pdfError.message);
+        pdf = null;
+      }
     }
     if (!mammoth) {
-      mammoth = await import('mammoth');
+      try {
+        mammoth = await import('mammoth');
+      } catch (mammothError) {
+        console.warn('Word document parsing unavailable:', mammothError.message);
+        mammoth = null;
+      }
+    }
+    if (!pptx) {
+      try {
+        const pptxModule = await import('node-pptx');
+        pptx = pptxModule.default || pptxModule;
+      } catch (pptxError) {
+        console.warn('PowerPoint parsing unavailable:', pptxError.message);
+        pptx = null;
+      }
     }
   } catch (error) {
     console.error('Error loading file processing dependencies:', error);
-    // Fallback - we'll handle this in extractTextFromFile
   }
 }
 
 export const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.ms-powerpoint',
+  'application/msword',
   'text/plain'
 ];
 

@@ -21,10 +21,7 @@ async function loadDependencies() {
 }
 
 export const ALLOWED_MIME_TYPES = [
-  'application/pdf',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'text/plain',
-  'application/msword'
+  'text/plain'
 ];
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB

@@ -106,6 +106,13 @@
     "typescript": "^5.5.3",
     "vaul": "^0.9.3",
     "vite": "^6.2.2",
-    "vitest": "^3.1.4"
+    "vitest": "^3.1.4",
+    "react-dropzone": "^14.2.3",
+    "socket.io-client": "^4.7.5",
+    "prisma": "^5.8.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/multer": "^1.4.11",
+    "@types/pdf-parse": "^1.1.4"
   }
 }

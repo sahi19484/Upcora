@@ -248,4 +248,36 @@ router.put('/password', authenticate, async (req: AuthRequest, res) => {
   }
 });
 
+// Temporary test endpoint to create a test user
+router.post('/create-test-user', async (req, res) => {
+  try {
+    console.log('Creating test user...');
+
+    // Check if test user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: 'test@example.com' }
+    });
+
+    if (existingUser) {
+      return res.json({ message: 'Test user already exists', email: 'test@example.com' });
+    }
+
+    const passwordHash = await hashPassword('testpass123');
+
+    const user = await prisma.user.create({
+      data: {
+        email: 'test@example.com',
+        passwordHash,
+        name: 'Test User'
+      }
+    });
+
+    console.log('Test user created:', user.email);
+    res.json({ message: 'Test user created', email: user.email, password: 'testpass123' });
+  } catch (error) {
+    console.error('Error creating test user:', error);
+    res.status(500).json({ error: 'Failed to create test user' });
+  }
+});
+
 export default router;

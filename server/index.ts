@@ -27,6 +27,7 @@ export function createServer() {
   app.use("/api/auth", authRoutes);
   app.use("/api/upload", uploadRoutes);
   app.use("/api/games", gameRoutes);
+  app.use("/api/admin", adminRoutes);
 
   // Global error handler
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

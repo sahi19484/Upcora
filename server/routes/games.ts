@@ -347,6 +347,8 @@ router.post('/:gameId/score', authenticate, async (req: AuthRequest, res) => {
       xpEarned += 15;
     }
 
+    const badgesString = badges.join(',');
+
     // Save score
     const score = await prisma.score.create({
       data: {

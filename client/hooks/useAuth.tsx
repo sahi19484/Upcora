@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+// Utility function to convert badges string to array
+const parseBadges = (badgesString: string): string[] => {
+  if (!badgesString || badgesString.trim() === '') return [];
+  return badgesString.split(',').map(b => b.trim()).filter(b => b.length > 0);
+};
+
 interface User {
   id: string;
   email: string;

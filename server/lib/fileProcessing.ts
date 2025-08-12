@@ -49,6 +49,9 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
   try {
     switch (mimeType) {
       case 'application/pdf':
+        if (!pdf) {
+          throw new Error('PDF processing is temporarily unavailable. Please try uploading a text file instead.');
+        }
         const pdfData = await pdf(buffer);
         text = pdfData.text;
         pages = pdfData.numpages;
@@ -56,16 +59,27 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
 
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
+        if (!mammoth) {
+          throw new Error('Word document processing is temporarily unavailable. Please try uploading a text file instead.');
+        }
         const docxResult = await mammoth.extractRawText({ buffer });
         text = docxResult.value;
         break;
-        
+
       case 'text/plain':
         text = buffer.toString('utf-8');
         break;
-        
+
       default:
-        throw new Error(`Unsupported file type: ${mimeType}`);
+        // For unsupported types, try to read as text
+        try {
+          text = buffer.toString('utf-8');
+          if (text.length < 10) {
+            throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, or text files.`);
+          }
+        } catch {
+          throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, or text files.`);
+        }
     }
 
     // Clean up the extracted text

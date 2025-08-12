@@ -360,7 +360,7 @@ router.post('/:gameId/score', authenticate, async (req: AuthRequest, res) => {
         correctAnswers: scoreData.correctAnswers,
         totalQuestions: scoreData.totalQuestions,
         xpEarned,
-        badges
+        badges: badgesString
       }
     });
 
@@ -372,14 +372,15 @@ router.post('/:gameId/score', authenticate, async (req: AuthRequest, res) => {
     if (user) {
       const newXP = user.xp + xpEarned;
       const newLevel = Math.floor(newXP / 100) + 1;
-      const allBadges = [...new Set([...user.badges, ...badges])];
+      const existingBadges = user.badges ? user.badges.split(',').filter(b => b.length > 0) : [];
+      const allBadges = [...new Set([...existingBadges, ...badges])];
 
       await prisma.user.update({
         where: { id: req.user!.id },
         data: {
           xp: newXP,
           level: newLevel,
-          badges: allBadges
+          badges: allBadges.join(',')
         }
       });
     }

@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+// Type definitions for libraries
+declare module 'node-pptx' {
+  class Presentation {
+    slides: any[];
+    load(buffer: Buffer): Promise<void>;
+  }
+  export default { Presentation };
+}
+
 // Lazy loading of dependencies to avoid bundling issues
 let pdf: any;
 let mammoth: any;

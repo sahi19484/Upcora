@@ -37,8 +37,11 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'User already exists' });
     }
 
+    console.log('Hashing password...');
     const passwordHash = await hashPassword(password);
+    console.log('Password hashed successfully');
 
+    console.log('Creating user in database...');
     const user = await prisma.user.create({
       data: {
         email,
@@ -56,6 +59,7 @@ router.post('/signup', async (req, res) => {
         createdAt: true
       }
     });
+    console.log('User created successfully:', user.id);
 
     const token = generateToken(user.id, user.email, user.role);
 

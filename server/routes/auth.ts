@@ -66,12 +66,14 @@ router.post('/signup', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
+    console.log('Login attempt for:', req.body.email);
     const { email, password } = loginSchema.parse(req.body);
 
     const user = await prisma.user.findUnique({
       where: { email }
     });
 
+    console.log('User found:', !!user);
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }

@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth";
 import uploadRoutes from "./routes/upload";
 import gameRoutes from "./routes/games";
+import adminRoutes from "./routes/admin";
 import { handleDemo } from "./routes/demo";
 
 export function createServer() {

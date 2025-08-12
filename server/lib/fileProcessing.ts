@@ -70,14 +70,71 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
   try {
     switch (mimeType) {
       case 'application/pdf':
-        // Temporarily disabled due to library issue
-        throw new Error('PDF processing is temporarily unavailable. Please try uploading a text file instead.');
+        if (!pdf) {
+          throw new Error('PDF processing library not available. Please try uploading a text file.');
+        }
+        try {
+          const pdfData = await pdf(buffer);
+          text = pdfData.text || '';
+          pages = pdfData.numpages;
+        } catch (pdfError) {
+          throw new Error(`Failed to process PDF: ${pdfError.message}. Please try saving as a text file.`);
+        }
         break;
 
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
-        // Temporarily disabled due to library issue
-        throw new Error('Word document processing is temporarily unavailable. Please try uploading a text file instead.');
+        if (!mammoth) {
+          throw new Error('Word document processing library not available. Please try uploading a text file.');
+        }
+        try {
+          const docxResult = await mammoth.extractRawText({ buffer });
+          text = docxResult.value || '';
+        } catch (wordError) {
+          throw new Error(`Failed to process Word document: ${wordError.message}. Please try saving as a text file.`);
+        }
+        break;
+
+      case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+      case 'application/vnd.ms-powerpoint':
+        if (!pptx) {
+          throw new Error('PowerPoint processing library not available. Please try uploading a text file.');
+        }
+        try {
+          // PowerPoint processing with node-pptx
+          const presentation = new pptx.Presentation();
+          await presentation.load(buffer);
+
+          let slideTexts: string[] = [];
+          const slides = presentation.slides;
+
+          for (let i = 0; i < slides.length; i++) {
+            const slide = slides[i];
+            const slideText = slide.getTextContent?.() || '';
+            if (slideText.trim()) {
+              slideTexts.push(`Slide ${i + 1}: ${slideText}`);
+            }
+          }
+
+          text = slideTexts.join('\n\n');
+          pages = slides.length;
+        } catch (pptError) {
+          // Fallback: try to extract as XML text (for PPTX files)
+          try {
+            const textContent = buffer.toString('utf-8');
+            const xmlMatches = textContent.match(/<a:t[^>]*>([^<]+)<\/a:t>/g);
+            if (xmlMatches && xmlMatches.length > 0) {
+              text = xmlMatches
+                .map(match => match.replace(/<[^>]+>/g, ''))
+                .filter(t => t.trim().length > 0)
+                .join(' ');
+            } else {
+              throw new Error('No text content found in PowerPoint file');
+            }
+          } catch (fallbackError) {
+            throw new Error(`Failed to process PowerPoint: ${pptError.message}. Please try saving slides as a text file.`);
+          }
+        }
         break;
 
       case 'text/plain':
@@ -88,11 +145,12 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
         // For unsupported types, try to read as text
         try {
           text = buffer.toString('utf-8');
-          if (text.length < 10) {
-            throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, or text files.`);
+          // Check if it looks like readable text
+          if (text.length < 10 || text.includes('\x00') || text.includes('\xFF')) {
+            throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, PowerPoint, or text files.`);
           }
         } catch {
-          throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, or text files.`);
+          throw new Error(`Unsupported file type: ${mimeType}. Please upload PDF, Word, PowerPoint, or text files.`);
         }
     }
 

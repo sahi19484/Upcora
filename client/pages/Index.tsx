@@ -274,6 +274,12 @@ export default function Index() {
         mode={authModal.mode}
         onModeChange={(mode) => setAuthModal({ ...authModal, mode })}
       />
+
+      {/* Demo Modal */}
+      <DemoModal
+        isOpen={demoModal}
+        onClose={() => setDemoModal(false)}
+      />
     </div>
   );
 }

@@ -78,7 +78,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
+    console.log('Checking password...');
     const isValidPassword = await comparePassword(password, user.passwordHash);
+    console.log('Password valid:', isValidPassword);
+
     if (!isValidPassword) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
@@ -89,6 +92,7 @@ router.post('/login', async (req, res) => {
     });
 
     const token = generateToken(user.id, user.email, user.role);
+    console.log('Login successful for:', email);
 
     const userResponse = {
       id: user.id,

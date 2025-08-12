@@ -54,7 +54,10 @@ export const ALLOWED_MIME_TYPES = [
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   'application/vnd.ms-powerpoint',
   'application/msword',
-  'text/plain'
+  'text/plain',
+  // Additional PowerPoint MIME types for better compatibility
+  'application/powerpoint',
+  'application/x-mspowerpoint'
 ];
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB

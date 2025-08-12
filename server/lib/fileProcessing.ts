@@ -106,43 +106,25 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
 
       case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
       case 'application/vnd.ms-powerpoint':
-        if (!pptx) {
-          throw new Error('PowerPoint processing library not available. Please try uploading a text file.');
-        }
         try {
-          // PowerPoint processing with node-pptx
-          const presentation = new pptx.Presentation();
-          await presentation.load(buffer);
-
-          let slideTexts: string[] = [];
-          const slides = presentation.slides;
-
-          for (let i = 0; i < slides.length; i++) {
-            const slide = slides[i];
-            const slideText = slide.getTextContent?.() || '';
-            if (slideText.trim()) {
-              slideTexts.push(`Slide ${i + 1}: ${slideText}`);
-            }
-          }
-
-          text = slideTexts.join('\n\n');
-          pages = slides.length;
-        } catch (pptError) {
-          // Fallback: try to extract as XML text (for PPTX files)
-          try {
+          // For PPTX files, try to extract text from XML structure
+          if (mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
             const textContent = buffer.toString('utf-8');
             const xmlMatches = textContent.match(/<a:t[^>]*>([^<]+)<\/a:t>/g);
             if (xmlMatches && xmlMatches.length > 0) {
-              text = xmlMatches
+              const extractedTexts = xmlMatches
                 .map(match => match.replace(/<[^>]+>/g, ''))
-                .filter(t => t.trim().length > 0)
-                .join(' ');
+                .filter(t => t.trim().length > 0);
+              text = extractedTexts.join(' ');
             } else {
               throw new Error('No text content found in PowerPoint file');
             }
-          } catch (fallbackError) {
-            throw new Error(`Failed to process PowerPoint: ${pptError.message}. Please try saving slides as a text file.`);
+          } else {
+            // For PPT files, it's more complex - for now, inform user to use PPTX
+            throw new Error('Legacy PPT format not supported. Please save as PPTX format.');
           }
+        } catch (pptError) {
+          throw new Error(`Failed to process PowerPoint: ${pptError.message}. Please try saving slides as a text file or convert to PPTX format.`);
         }
         break;
 

@@ -92,7 +92,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const data = await response.json();
 
       if (response.ok) {
-        setUser(data.user);
+        setUser({
+          ...data.user,
+          badges: parseBadges(data.user.badges)
+        });
         setToken(data.token);
         localStorage.setItem('quizcraft_token', data.token);
       } else {

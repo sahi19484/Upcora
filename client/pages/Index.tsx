@@ -17,7 +17,7 @@ export default function Index() {
     {
       icon: <Upload className="w-8 h-8 text-blue-600" />,
       title: "Easy Upload",
-      description: "Drag & drop your PDFs, Word documents, or paste URLs. We'll extract the key content instantly."
+      description: "Drag & drop your PDFs, Word documents, PowerPoint presentations, or paste URLs. We'll extract the key content instantly."
     },
     {
       icon: <Brain className="w-8 h-8 text-purple-600" />,

@@ -59,7 +59,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (response.ok) {
         const userData = await response.json();
-        setUser(userData);
+        setUser({
+          ...userData,
+          badges: parseBadges(userData.badges)
+        });
       } else {
         localStorage.removeItem('quizcraft_token');
         setToken(null);

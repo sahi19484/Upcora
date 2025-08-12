@@ -1,7 +1,8 @@
 {
-  "name": "fusion-starter",
+  "name": "quizcraft",
   "private": true,
   "type": "module",
+  "description": "AI-powered interactive learning platform that transforms study materials into engaging games",
   "pkg": {
     "assets": [
       "dist/spa/*"

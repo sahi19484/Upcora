@@ -158,15 +158,13 @@ export default function Upload() {
           </h2>
           <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800">
             <div>
-              <h3 className="font-medium mb-2">📄 Currently Available</h3>
+              <h3 className="font-medium mb-2">📄 Document Formats</h3>
               <ul className="space-y-1">
+                <li>• PDF files (.pdf)</li>
+                <li>• Word documents (.docx, .doc)</li>
+                <li>• PowerPoint presentations (.pptx, .ppt)</li>
                 <li>• Text files (.txt)</li>
               </ul>
-              <div className="mt-3 p-3 bg-orange-100 rounded border border-orange-200">
-                <p className="text-orange-800 text-xs">
-                  <strong>Coming Soon:</strong> PDF and Word document support
-                </p>
-              </div>
             </div>
             <div>
               <h3 className="font-medium mb-2">🌐 Web Content</h3>
@@ -174,6 +172,7 @@ export default function Upload() {
                 <li>• Blog articles</li>
                 <li>• Educational websites</li>
                 <li>• Online documentation</li>
+                <li>• Study guides</li>
               </ul>
             </div>
           </div>

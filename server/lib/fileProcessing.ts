@@ -79,15 +79,25 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
   try {
     switch (mimeType) {
       case 'application/pdf':
-        if (!pdf) {
-          throw new Error('PDF processing library not available. Please try uploading a text file.');
-        }
         try {
-          const pdfData = await pdf(buffer);
+          // Try to load pdf-parse dynamically and safely
+          const pdfParse = await import('pdf-parse');
+          const pdfFunction = pdfParse.default || pdfParse;
+
+          const pdfData = await pdfFunction(buffer);
           text = pdfData.text || '';
           pages = pdfData.numpages;
+
+          if (!text.trim()) {
+            throw new Error('No text content found in PDF');
+          }
         } catch (pdfError) {
-          throw new Error(`Failed to process PDF: ${pdfError.message}. Please try saving as a text file.`);
+          // If PDF parsing fails, provide helpful error message
+          if (pdfError.message.includes('ENOENT') || pdfError.message.includes('test/data')) {
+            throw new Error('PDF processing temporarily unavailable due to library issue. Please try saving your PDF as a text file.');
+          } else {
+            throw new Error(`Failed to process PDF: ${pdfError.message}. Please try saving as a text file or ensure the PDF contains readable text.`);
+          }
         }
         break;
 

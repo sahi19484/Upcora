@@ -5,6 +5,12 @@ import { hashPassword, comparePassword, generateToken, authenticate, AuthRequest
 
 const router = Router();
 
+// Add logging middleware for all auth routes
+router.use((req, res, next) => {
+  console.log(`Auth route hit: ${req.method} ${req.path}`);
+  next();
+});
+
 const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),

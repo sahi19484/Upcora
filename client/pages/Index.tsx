@@ -205,7 +205,10 @@ export default function Index() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">Interactive Demo</h3>
                 <p className="text-gray-500">Experience a sample learning game</p>
-                <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button
+                  onClick={() => setDemoModal(true)}
+                  className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
                   Try Demo
                 </button>
               </div>

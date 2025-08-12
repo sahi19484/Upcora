@@ -1,15 +1,22 @@
 import { z } from 'zod';
 
-// Dynamic imports to avoid bundling server-only dependencies in client
+// Lazy loading of dependencies to avoid bundling issues
 let pdf: any;
 let mammoth: any;
 
 async function loadDependencies() {
-  if (!pdf) {
-    pdf = (await import('pdf-parse')).default;
-  }
-  if (!mammoth) {
-    mammoth = await import('mammoth');
+  try {
+    if (!pdf) {
+      // Use dynamic import with error handling
+      const pdfModule = await import('pdf-parse');
+      pdf = pdfModule.default || pdfModule;
+    }
+    if (!mammoth) {
+      mammoth = await import('mammoth');
+    }
+  } catch (error) {
+    console.error('Error loading file processing dependencies:', error);
+    // Fallback - we'll handle this in extractTextFromFile
   }
 }
 

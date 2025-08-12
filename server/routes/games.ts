@@ -229,7 +229,7 @@ router.post('/process', authenticate, async (req: AuthRequest, res) => {
         userId: req.user!.id,
         title: gameData.title,
         gameType: 'INTERACTIVE',
-        gameData: gameData
+        gameData: JSON.stringify(gameData)
       }
     });
 

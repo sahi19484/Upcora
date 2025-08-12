@@ -140,23 +140,3 @@ model AuditLog {
 
   @@map("audit_logs")
 }
-
-enum Role {
-  USER
-  ADMIN
-  MODERATOR
-}
-
-enum GameType {
-  INTERACTIVE
-  QUIZ_ONLY
-  ROLEPLAY_ONLY
-  MULTIPLAYER
-}
-
-enum SessionStatus {
-  WAITING
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-}

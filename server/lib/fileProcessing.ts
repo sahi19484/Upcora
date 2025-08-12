@@ -55,11 +55,8 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
 
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
-        if (!mammoth) {
-          throw new Error('Word document processing is temporarily unavailable. Please try uploading a text file instead.');
-        }
-        const docxResult = await mammoth.extractRawText({ buffer });
-        text = docxResult.value;
+        // Temporarily disabled due to library issue
+        throw new Error('Word document processing is temporarily unavailable. Please try uploading a text file instead.');
         break;
 
       case 'text/plain':

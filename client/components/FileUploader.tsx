@@ -210,10 +210,13 @@ export function FileUploader({ onUploadComplete, onError }: FileUploaderProps) {
             {isDragActive ? 'Drop your file here' : 'Upload your study material'}
           </h3>
           <p className="text-gray-600 mb-4">
-            Drag & drop your PDF, Word document, or text file here, or click to browse
+            Drag & drop your text file here, or click to browse
           </p>
           <p className="text-sm text-gray-500">
-            Supported formats: PDF, DOCX, DOC, TXT (max 10MB)
+            Currently supported: TXT files (max 10MB)
+          </p>
+          <p className="text-xs text-orange-600 mt-2">
+            PDF and Word support temporarily unavailable - coming soon!
           </p>
         </div>
       ) : (

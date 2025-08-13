@@ -17,7 +17,7 @@ export function createServer() {
 
   // Health check
   app.get("/api/ping", (_req, res) => {
-    res.json({ message: "QuizCraft API is running!" });
+    res.json({ message: "Loomify API is running!" });
   });
 
   // Legacy demo route

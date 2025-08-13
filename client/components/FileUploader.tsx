@@ -62,7 +62,6 @@ export function FileUploader({ onUploadComplete, onError }: FileUploaderProps) {
       };
 
       xhr.open('POST', '/api/upload/file');
-      xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('loomify_token')}`);
       xhr.send(formData);
     } catch (error) {
       console.error('Upload error:', error);

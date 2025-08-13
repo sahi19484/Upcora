@@ -51,8 +51,8 @@ model GameSession {
   id                String         @id @default(cuid())
   upload            Upload         @relation(fields: [uploadId], references: [id], onDelete: Cascade)
   uploadId          String
-  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String
+  user              User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?
   title             String
   gameType          String         @default("INTERACTIVE")
   gameData          String

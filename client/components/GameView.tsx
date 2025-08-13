@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle } from 'lucide-react';
+import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle, Play, Award, Target, Zap } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { MediaDisplay, MediaGallery, ProgressVisualization } from './MediaDisplay';
+import { InteractiveQuiz } from './InteractiveQuiz';
 
 interface MediaContent {
   url: string;

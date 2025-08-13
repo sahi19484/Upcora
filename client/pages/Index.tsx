@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
 import { Brain, Upload, Gamepad2, Trophy, Users, BookOpen, ArrowRight, Sparkles, Target, Clock } from 'lucide-react';
-import { AuthModal, AuthButton } from '../components/AuthModal';
 import { DemoModal } from '../components/DemoModal';
-import { useAuth } from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
 
 export default function Index() {
-  const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'login' | 'signup' }>({
-    isOpen: false,
-    mode: 'login'
-  });
   const [demoModal, setDemoModal] = useState(false);
-  const { user } = useAuth();
 
   const features = [
     {

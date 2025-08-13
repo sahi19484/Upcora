@@ -104,17 +104,29 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   const fetchGameData = async () => {
     try {
+      console.log('Fetching game data for gameId:', gameId);
       const response = await fetch(`/api/games/${gameId}`);
-      const data = await response.json();
+      console.log('Response status:', response.status, response.statusText);
 
-      if (response.ok) {
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        setError(`Failed to load game: ${response.status} ${response.statusText}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('Game data received:', data);
+
+      if (data.gameData) {
         setGameData(data.gameData);
         setStartTime(new Date());
       } else {
-        setError(data.error || 'Failed to load game');
+        setError('Invalid game data received');
       }
     } catch (error) {
-      setError('Network error while loading game');
+      console.error('Fetch error:', error);
+      setError(`Network error while loading game: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

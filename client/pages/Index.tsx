@@ -194,23 +194,13 @@ export default function Index() {
             Join thousands of learners who are already using Loomify to make studying more engaging and effective.
           </p>
           
-          {user ? (
-            <Link
-              to="/upload"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
-            >
-              Create Your First Game
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Link>
-          ) : (
-            <button
-              onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
-            >
-              Start Free Today
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </button>
-          )}
+          <Link
+            to="/upload"
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+          >
+            Start Creating Now
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Link>
         </div>
       </section>
 

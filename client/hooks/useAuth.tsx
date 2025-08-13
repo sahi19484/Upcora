@@ -64,7 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           badges: parseBadges(userData.badges)
         });
       } else {
-        localStorage.removeItem('quizcraft_token');
+        localStorage.removeItem('loomify_token');
         setToken(null);
       }
     } catch (error) {

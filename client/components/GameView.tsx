@@ -405,43 +405,91 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
   // Roleplay Phase
   if (currentPhase === 'roleplay') {
     const step = gameData.roleplay.steps.find(s => s.id === currentStep);
-    
+    const totalSteps = 3;
+
     if (!step) {
       setCurrentPhase('quiz');
       return null;
     }
 
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto p-6">
+        {/* Progress Visualization */}
+        <ProgressVisualization
+          currentStep={2}
+          totalSteps={totalSteps}
+          milestones={gameData.gamification?.progressMilestones || ['25%', '50%', '75%', '100%']}
+          className="mb-6"
+        />
+
+        {/* Background Image */}
+        {gameData.roleplay.backgroundImage && (
+          <div className="mb-6">
+            <MediaDisplay
+              media={gameData.roleplay.backgroundImage}
+              type="image"
+              className="w-full max-h-64 object-cover"
+            />
+          </div>
+        )}
+
         <div className="mb-6">
           <div className="bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-2">Roleplay Simulation</h2>
-            <p className="opacity-90">{gameData.roleplay.scenario}</p>
+            <h2 className="text-2xl font-semibold mb-2 flex items-center">
+              <Target className="w-6 h-6 mr-2" />
+              Roleplay Simulation
+            </h2>
+            <p className="opacity-90 text-lg leading-relaxed">{gameData.roleplay.scenario}</p>
+            {roleplayScore > 0 && (
+              <div className="mt-4 flex items-center space-x-2 bg-white bg-opacity-20 rounded-lg px-3 py-2 w-fit">
+                <Trophy className="w-5 h-5" />
+                <span className="font-medium">Current Score: {roleplayScore} points</span>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <p className="text-lg text-gray-900 mb-6">{step.text}</p>
-          
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6 shadow-lg">
+          {/* Step Media Content */}
+          {step.mediaContent?.image && (
+            <div className="mb-6">
+              <MediaDisplay
+                media={step.mediaContent.image}
+                type="image"
+                className="max-w-lg mx-auto"
+              />
+            </div>
+          )}
+
+          <p className="text-xl text-gray-900 mb-8 leading-relaxed">{step.text}</p>
+
           {!showFeedback ? (
-            <div className="space-y-3">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Choose your approach:</h3>
               {step.choices.map((choice) => (
                 <button
                   key={choice.id}
                   onClick={() => handleRoleplayChoice(choice)}
-                  className="w-full text-left p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                  className="w-full text-left p-6 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 transform hover:scale-[1.02] hover:shadow-md"
                 >
-                  {choice.label}
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-medium">{choice.label}</span>
+                    {choice.points && (
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                        +{choice.points} pts
+                      </span>
+                    )}
+                  </div>
                 </button>
               ))}
             </div>
           ) : (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-6">
+              <div className="flex items-start space-x-4">
+                <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="font-medium text-green-800 mb-1">Feedback</h4>
-                  <p className="text-green-700">{showFeedback}</p>
+                  <h4 className="font-semibold text-green-800 mb-2 text-lg">Expert Feedback</h4>
+                  <p className="text-green-700 text-lg leading-relaxed">{showFeedback}</p>
                 </div>
               </div>
             </div>

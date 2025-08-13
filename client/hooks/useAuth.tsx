@@ -143,7 +143,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('loomify_token');
+    localStorage.removeItem('upcora_token');
   };
 
   return (

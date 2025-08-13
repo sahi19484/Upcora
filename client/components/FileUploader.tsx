@@ -80,8 +80,11 @@ export function FileUploader({ onUploadComplete, onError }: FileUploaderProps) {
     });
 
     try {
-      const response = await authenticatedFetch('/api/upload/url', {
+      const response = await fetch('/api/upload/url', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ url: urlInput })
       });
 

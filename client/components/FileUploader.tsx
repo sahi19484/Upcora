@@ -19,7 +19,6 @@ export function FileUploader({ onUploadComplete, onError }: FileUploaderProps) {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
   const [urlInput, setUrlInput] = useState('');
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
-  const authenticatedFetch = useAuthenticatedFetch();
 
   const uploadFile = useCallback(async (file: File) => {
     setUploadProgress({

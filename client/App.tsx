@@ -10,8 +10,6 @@ import { AuthProvider } from "./hooks/useAuth";
 import Index from "./pages/Index";
 import Upload from "./pages/Upload";
 import Game from "./pages/Game";
-import Dashboard from "./pages/Dashboard";
-import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

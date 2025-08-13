@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, Link, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { useAuthenticatedFetch } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 
 interface FileUploaderProps {

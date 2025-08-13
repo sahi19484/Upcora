@@ -181,21 +181,43 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
     switch (mimeType) {
       case 'application/pdf':
         try {
-          // Try to load pdf-parse dynamically and safely
-          const pdfParse = await import('pdf-parse');
-          const pdfFunction = pdfParse.default || pdfParse;
+          // Check if pdf library is available from dependency loading
+          if (!pdf) {
+            try {
+              // Fallback: try direct import
+              const pdfParse = await import('pdf-parse');
+              const pdfFunction = pdfParse.default || pdfParse;
 
-          const pdfData = await pdfFunction(buffer);
-          text = pdfData.text || '';
-          pages = pdfData.numpages;
+              const pdfData = await pdfFunction(buffer);
+              text = pdfData.text || '';
+              pages = pdfData.numpages;
+            } catch (importError) {
+              // If import fails, try alternative PDF processing
+              console.warn('pdf-parse import failed:', importError);
+              throw new Error('PDF library not available. Please try converting your PDF to text format.');
+            }
+          } else {
+            // Use pre-loaded pdf library
+            const pdfData = await pdf(buffer);
+            text = pdfData.text || '';
+            pages = pdfData.numpages;
+          }
 
           if (!text.trim()) {
-            throw new Error('No text content found in PDF');
+            throw new Error('No text content found in PDF. The PDF may be image-based or protected. Please try saving as a text file.');
           }
         } catch (pdfError) {
-          // If PDF parsing fails, provide helpful error message
+          console.error('PDF processing error:', pdfError);
+
+          // Provide more specific error messages
           if (pdfError.message.includes('ENOENT') || pdfError.message.includes('test/data')) {
-            throw new Error('PDF processing temporarily unavailable due to library issue. Please try saving your PDF as a text file.');
+            throw new Error('PDF processing library not properly installed. Please try uploading a text file instead.');
+          } else if (pdfError.message.includes('Invalid PDF')) {
+            throw new Error('Invalid or corrupted PDF file. Please try re-saving the PDF or converting to text format.');
+          } else if (pdfError.message.includes('PDF library not available')) {
+            throw pdfError;
+          } else if (pdfError.message.includes('No text content found')) {
+            throw pdfError;
           } else {
             throw new Error(`Failed to process PDF: ${pdfError.message}. Please try saving as a text file or ensure the PDF contains readable text.`);
           }

@@ -89,11 +89,14 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
   const [currentPhase, setCurrentPhase] = useState<'intro' | 'roleplay' | 'quiz' | 'complete'>('intro');
   const [currentStep, setCurrentStep] = useState<string>('step1');
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, any>>({});
   const [showFeedback, setShowFeedback] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [roleplayScore, setRoleplayScore] = useState(0);
+  const [achievements, setAchievements] = useState<string[]>([]);
+  const [showMediaGallery, setShowMediaGallery] = useState(false);
 
   useEffect(() => {
     fetchGameData();

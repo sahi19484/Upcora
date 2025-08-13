@@ -153,10 +153,10 @@ export default function Game() {
                   Play Again
                 </button>
                 <button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate('/')}
                   className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  View Dashboard
+                  Create Another Game
                   <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
                 </button>
               </div>

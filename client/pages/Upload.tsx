@@ -16,8 +16,11 @@ export default function Upload() {
     setError(null);
 
     try {
-      const response = await authenticatedFetch('/api/games/process', {
+      const response = await fetch('/api/games/process', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ uploadId })
       });
 

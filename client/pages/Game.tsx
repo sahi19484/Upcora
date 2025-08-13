@@ -167,10 +167,6 @@ export default function Game() {
         )}
       </main>
 
-      {/* XP Notification */}
-      {showXPNotification && gameComplete && (
-        <XPNotification xp={gameComplete.xpEarned} badges={gameComplete.badges} />
-      )}
     </div>
   );
 }

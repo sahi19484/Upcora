@@ -183,7 +183,7 @@ async function generateGameWithAI(text: string): Promise<any> {
 }
 
 // Process upload with AI to generate game
-router.post('/process', authenticate, async (req: AuthRequest, res) => {
+router.post('/process', async (req, res) => {
   try {
     const { uploadId } = z.object({
       uploadId: z.string()

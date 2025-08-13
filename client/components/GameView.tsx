@@ -113,8 +113,11 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
     const timeSpent = Math.floor((Date.now() - startTime.getTime()) / 1000);
 
     try {
-      const response = await authenticatedFetch(`/api/games/${gameId}/score`, {
+      const response = await fetch(`/api/games/${gameId}/score`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           score,
           maxScore,

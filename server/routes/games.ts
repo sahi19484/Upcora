@@ -3,6 +3,7 @@ import { z } from 'zod';
 import prisma from '../lib/prisma';
 import { authenticate, AuthRequest } from '../lib/auth';
 import { truncateTextForAI } from '../lib/fileProcessing';
+import { searchMediaContent, MediaContent, extractKeyConceptsFromText } from '../lib/mediaService';
 
 const router = Router();
 

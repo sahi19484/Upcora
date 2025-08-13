@@ -302,7 +302,7 @@ router.get('/:gameId', async (req, res) => {
 });
 
 // Submit game score
-router.post('/:gameId/score', authenticate, async (req: AuthRequest, res) => {
+router.post('/:gameId/score', async (req, res) => {
   try {
     const { gameId } = req.params;
     const scoreData = z.object({

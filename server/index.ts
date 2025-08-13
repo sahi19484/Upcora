@@ -17,7 +17,7 @@ export function createServer() {
 
   // Health check
   app.get("/api/ping", (_req, res) => {
-    res.json({ message: "Loomify API is running!" });
+    res.json({ message: "Upcora API is running!" });
   });
 
   // Legacy demo route

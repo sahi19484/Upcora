@@ -62,6 +62,104 @@ export const ALLOWED_MIME_TYPES = [
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
+async function extractTextFromPPTX(buffer: Buffer): Promise<string> {
+  if (!jszip) {
+    throw new Error('PowerPoint processing library not available');
+  }
+
+  try {
+    const zip = new jszip();
+    const pptxData = await zip.loadAsync(buffer);
+
+    let extractedText = '';
+    const slideFiles: string[] = [];
+
+    // Find all slide files
+    pptxData.forEach((relativePath: string) => {
+      if (relativePath.match(/ppt\/slides\/slide\d+\.xml$/)) {
+        slideFiles.push(relativePath);
+      }
+    });
+
+    // Sort slides by number
+    slideFiles.sort((a, b) => {
+      const aNum = parseInt(a.match(/slide(\d+)\.xml$/)?.[1] || '0');
+      const bNum = parseInt(b.match(/slide(\d+)\.xml$/)?.[1] || '0');
+      return aNum - bNum;
+    });
+
+    // Extract text from each slide
+    for (const slideFile of slideFiles) {
+      try {
+        const slideXml = await pptxData.file(slideFile)?.async('string');
+        if (slideXml) {
+          // Extract text from various PowerPoint text elements
+          const textMatches = slideXml.match(/<a:t[^>]*>([^<]+)<\/a:t>/g) || [];
+          const paragraphMatches = slideXml.match(/<a:p[^>]*>.*?<\/a:p>/gs) || [];
+
+          // Extract from <a:t> tags (text runs)
+          const textFromRuns = textMatches
+            .map(match => match.replace(/<[^>]+>/g, '').trim())
+            .filter(text => text.length > 0);
+
+          // Extract from paragraph structures and clean
+          const textFromParagraphs = paragraphMatches
+            .map(match => {
+              // Remove all XML tags and get clean text
+              return match.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            })
+            .filter(text => text.length > 0);
+
+          // Combine all text from this slide
+          const slideText = [...textFromRuns, ...textFromParagraphs]
+            .filter((text, index, array) => array.indexOf(text) === index) // Remove duplicates
+            .join(' ')
+            .trim();
+
+          if (slideText) {
+            extractedText += slideText + '\n\n';
+          }
+        }
+      } catch (slideError) {
+        console.warn(`Error processing slide ${slideFile}:`, slideError);
+        // Continue with other slides
+      }
+    }
+
+    // Also try to extract from slide masters and layouts
+    const masterFiles = ['ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml'];
+    for (const masterFile of masterFiles) {
+      try {
+        const masterXml = await pptxData.file(masterFile)?.async('string');
+        if (masterXml) {
+          const masterTextMatches = masterXml.match(/<a:t[^>]*>([^<]+)<\/a:t>/g) || [];
+          const masterText = masterTextMatches
+            .map(match => match.replace(/<[^>]+>/g, '').trim())
+            .filter(text => text.length > 0 && !text.match(/^(Click to edit|Add your|Sample)/i))
+            .join(' ');
+
+          if (masterText && !extractedText.includes(masterText)) {
+            extractedText += masterText + '\n\n';
+          }
+        }
+      } catch (masterError) {
+        // Masters are optional, continue without them
+      }
+    }
+
+    if (!extractedText.trim()) {
+      throw new Error('No text content found in PowerPoint file');
+    }
+
+    return extractedText.trim();
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('No text content found')) {
+      throw error;
+    }
+    throw new Error(`Failed to parse PowerPoint file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
 export interface ExtractedContent {
   text: string;
   metadata: {

@@ -361,26 +361,7 @@ router.post('/:gameId/score', async (req, res) => {
       }
     });
 
-    // Update user XP and level
-    const user = await prisma.user.findUnique({
-      where: { id: req.user!.id }
-    });
-
-    if (user) {
-      const newXP = user.xp + xpEarned;
-      const newLevel = Math.floor(newXP / 100) + 1;
-      const existingBadges = user.badges ? user.badges.split(',').filter(b => b.length > 0) : [];
-      const allBadges = [...new Set([...existingBadges, ...badges])];
-
-      await prisma.user.update({
-        where: { id: req.user!.id },
-        data: {
-          xp: newXP,
-          level: newLevel,
-          badges: allBadges.join(',')
-        }
-      });
-    }
+    // No user XP update needed for anonymous users
 
     // Mark game session as completed
     await prisma.gameSession.update({

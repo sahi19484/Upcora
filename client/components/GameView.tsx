@@ -261,32 +261,141 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   // Intro Phase
   if (currentPhase === 'intro') {
+    const totalSteps = 3; // intro, roleplay, quiz
+
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto p-6">
+        {/* Header Image */}
+        {gameData.mediaContent?.headerImage && (
+          <div className="mb-8">
+            <MediaDisplay
+              media={gameData.mediaContent.headerImage}
+              type="image"
+              className="w-full max-h-96 object-cover"
+            />
+          </div>
+        )}
+
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{gameData.title}</h1>
-          <p className="text-lg text-gray-600 mb-6">{gameData.summary}</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{gameData.title}</h1>
+          <p className="text-xl text-gray-600 mb-6">{gameData.summary}</p>
+
+          {/* Key Topics */}
+          {gameData.keyTopics && gameData.keyTopics.length > 0 && (
+            <div className="flex justify-center flex-wrap gap-2 mb-6">
+              {gameData.keyTopics.map((topic, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                >
+                  {topic}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="bg-blue-50 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-blue-900 mb-4">Learning Objectives</h2>
-          <ul className="space-y-2">
-            {gameData.learningObjectives.map((objective, index) => (
-              <li key={index} className="flex items-start space-x-2 text-blue-800">
-                <Star className="w-5 h-5 mt-0.5 text-blue-600" />
-                <span>{objective}</span>
-              </li>
-            ))}
-          </ul>
+        {/* Progress Visualization */}
+        <ProgressVisualization
+          currentStep={1}
+          totalSteps={totalSteps}
+          milestones={gameData.gamification?.progressMilestones || ['25%', '50%', '75%', '100%']}
+          className="mb-8"
+        />
+
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          {/* Learning Objectives */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-blue-900 mb-4 flex items-center">
+              <Target className="w-6 h-6 mr-2" />
+              Learning Objectives
+            </h2>
+            <ul className="space-y-3">
+              {gameData.learningObjectives.map((objective, index) => (
+                <li key={index} className="flex items-start space-x-3 text-blue-800">
+                  <Star className="w-5 h-5 mt-0.5 text-blue-600 flex-shrink-0" />
+                  <span className="leading-relaxed">{objective}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Visual Concepts */}
+          {gameData.visualConcepts && gameData.visualConcepts.length > 0 && (
+            <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-green-900 mb-4 flex items-center">
+                <Award className="w-6 h-6 mr-2" />
+                Key Concepts to Explore
+              </h2>
+              <ul className="space-y-3">
+                {gameData.visualConcepts.map((concept, index) => (
+                  <li key={index} className="flex items-start space-x-3 text-green-800">
+                    <CheckCircle className="w-5 h-5 mt-0.5 text-green-600 flex-shrink-0" />
+                    <span className="leading-relaxed">{concept}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
+
+        {/* Media Gallery Toggle */}
+        {(gameData.mediaContent?.conceptImages?.length || gameData.mediaContent?.videos?.length) && (
+          <div className="mb-8">
+            <button
+              onClick={() => setShowMediaGallery(!showMediaGallery)}
+              className="w-full p-4 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors"
+            >
+              <div className="flex items-center justify-center space-x-2 text-gray-700">
+                <Play className="w-5 h-5" />
+                <span className="font-medium">
+                  {showMediaGallery ? 'Hide' : 'Explore'} Visual Learning Resources
+                </span>
+              </div>
+            </button>
+
+            {showMediaGallery && (
+              <div className="mt-4">
+                <MediaGallery
+                  images={gameData.mediaContent?.conceptImages}
+                  videos={gameData.mediaContent?.videos}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Gamification Preview */}
+        {gameData.gamification?.achievements && (
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-purple-900 mb-4 flex items-center">
+              <Trophy className="w-6 h-6 mr-2" />
+              Achievements to Unlock
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {gameData.gamification.achievements.slice(0, 3).map((achievement, index) => (
+                <div key={index} className="bg-white rounded-lg p-4 border border-purple-200">
+                  <div className="flex items-center space-x-2 mb-2">
+                    {achievement.icon === 'trophy' && <Trophy className="w-5 h-5 text-purple-600" />}
+                    {achievement.icon === 'brain' && <Target className="w-5 h-5 text-purple-600" />}
+                    {achievement.icon === 'zap' && <Zap className="w-5 h-5 text-purple-600" />}
+                    <span className="font-medium text-purple-900">{achievement.name}</span>
+                  </div>
+                  <p className="text-sm text-purple-700">{achievement.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="text-center">
           <button
             onClick={() => setCurrentPhase('roleplay')}
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
           >
+            <Play className="w-6 h-6 mr-2" />
             Start Learning Journey
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-6 h-6 ml-2" />
           </button>
         </div>
       </div>

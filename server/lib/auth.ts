@@ -32,7 +32,7 @@ export const comparePassword = async (password: string, hash: string): Promise<b
     console.error('bcrypt compare failed, trying fallback:', error);
     // Fallback comparison
     const crypto = await import('crypto');
-    const testHash = crypto.createHash('sha256').update(password + 'quizcraft-salt').digest('hex');
+    const testHash = crypto.createHash('sha256').update(password + 'loomify-salt').digest('hex');
     return testHash === hash;
   }
 };

@@ -80,7 +80,7 @@ router.post('/url', async (req, res) => {
 
     const uploadRecord = await prisma.upload.create({
       data: {
-        userId: req.user!.id,
+        userId: 'anonymous', // Use anonymous user
         fileName: extractedContent.metadata.fileName,
         fileUrl: url,
         fileType: extractedContent.metadata.fileType,

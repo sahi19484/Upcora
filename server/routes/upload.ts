@@ -72,7 +72,7 @@ router.post('/file', upload.single('file'), async (req, res) => {
 });
 
 // Upload URL endpoint
-router.post('/url', authenticate, async (req: AuthRequest, res) => {
+router.post('/url', async (req, res) => {
   try {
     const { url } = urlSchema.parse(req.body);
 

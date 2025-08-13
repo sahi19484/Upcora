@@ -2,58 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, ArrowLeft, Loader2 } from 'lucide-react';
 import { FileUploader } from '../components/FileUploader';
-import { useAuth, useAuthenticatedFetch } from '../hooks/useAuth';
-import { AuthModal } from '../components/AuthModal';
 
 export default function Upload() {
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const authenticatedFetch = useAuthenticatedFetch();
   const [processing, setProcessing] = useState<{
     uploadId: string;
     fileName: string;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'login' | 'signup' }>({
-    isOpen: false,
-    mode: 'login'
-  });
-
-  // Redirect to login if not authenticated
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-          <BookOpen className="w-12 h-12 mx-auto text-blue-600 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign In Required</h2>
-          <p className="text-gray-600 mb-6">
-            Please sign in to upload your study materials and create interactive games.
-          </p>
-          <div className="space-y-3">
-            <button
-              onClick={() => setAuthModal({ isOpen: true, mode: 'login' })}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-            >
-              Create Account
-            </button>
-          </div>
-        </div>
-        
-        <AuthModal
-          isOpen={authModal.isOpen}
-          onClose={() => setAuthModal({ ...authModal, isOpen: false })}
-          mode={authModal.mode}
-          onModeChange={(mode) => setAuthModal({ ...authModal, mode })}
-        />
-      </div>
-    );
-  }
 
   const handleUploadComplete = async (uploadId: string, fileName: string) => {
     setProcessing({ uploadId, fileName });

@@ -225,7 +225,7 @@ router.post('/process', async (req, res) => {
     const gameSession = await prisma.gameSession.create({
       data: {
         uploadId: upload.id,
-        userId: req.user!.id,
+        userId: 'anonymous',
         title: gameData.title,
         gameType: 'INTERACTIVE',
         gameData: JSON.stringify(gameData)

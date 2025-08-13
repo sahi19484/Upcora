@@ -1,4 +1,4 @@
-# Loomify
+# Upcora
 
 A production-ready AI-powered interactive learning platform built with React, Express server, featuring React Router 6 SPA mode, TypeScript, Vitest, Zod and modern tooling.
 

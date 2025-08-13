@@ -58,7 +58,7 @@ export default function Upload() {
             </button>
             <div className="flex items-center space-x-2">
               <BookOpen className="w-6 h-6 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">Loomify</span>
+              <span className="text-xl font-bold text-gray-900">Upcora</span>
             </div>
           </div>
         </div>

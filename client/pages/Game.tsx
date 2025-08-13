@@ -11,6 +11,7 @@ export default function Game() {
     xpEarned: number;
     badges: string[];
   } | null>(null);
+  const [showXPNotification, setShowXPNotification] = useState(false);
 
   if (!gameId) {
     return (

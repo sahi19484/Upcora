@@ -20,7 +20,7 @@ export const hashPassword = async (password: string): Promise<string> => {
     console.error('bcrypt hashing failed:', error);
     // Fallback to a simple hash for development (NOT FOR PRODUCTION)
     const crypto = await import('crypto');
-    return crypto.createHash('sha256').update(password + 'loomify-salt').digest('hex');
+    return crypto.createHash('sha256').update(password + 'upcora-salt').digest('hex');
   }
 };
 

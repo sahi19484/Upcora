@@ -79,8 +79,8 @@ export default function Game() {
                 <button
                   onClick={() => {
                     navigator.share?.({
-                      title: 'Loomify Learning Game',
-                      text: `I just completed a learning game on Loomify and scored ${gameComplete.score} points!`,
+                      title: 'Upcora Learning Game',
+                      text: `I just completed a learning game on Upcora and scored ${gameComplete.score} points!`,
                       url: window.location.href
                     }) || navigator.clipboard.writeText(window.location.href);
                   }}

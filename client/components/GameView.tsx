@@ -53,7 +53,7 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   const fetchGameData = async () => {
     try {
-      const response = await authenticatedFetch(`/api/games/${gameId}`);
+      const response = await fetch(`/api/games/${gameId}`);
       const data = await response.json();
 
       if (response.ok) {

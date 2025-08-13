@@ -350,7 +350,7 @@ router.post('/:gameId/score', async (req, res) => {
     const score = await prisma.score.create({
       data: {
         gameSessionId: gameSession.id,
-        userId: req.user!.id,
+        userId: 'anonymous',
         score: scoreData.score,
         maxScore: scoreData.maxScore,
         timeSpent: scoreData.timeSpent,

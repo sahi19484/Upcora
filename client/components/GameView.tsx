@@ -147,17 +147,54 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   const calculateScore = () => {
     if (!gameData) return { score: 0, maxScore: 0, correctAnswers: 0 };
-    
+
     let correctAnswers = 0;
+    let totalScore = 0;
+    let maxScore = 0;
+
     gameData.quiz.questions.forEach(question => {
-      if (selectedAnswers[question.id] === question.answerIndex) {
-        correctAnswers++;
+      const userAnswer = selectedAnswers[question.id];
+      const questionPoints = question.points || 10;
+      maxScore += questionPoints;
+
+      let isCorrect = false;
+
+      if (question.type === 'drag-drop' && question.correctMapping) {
+        // Check drag-drop answers
+        const correctMappings = Object.keys(question.correctMapping).length;
+        let correctUserMappings = 0;
+
+        if (userAnswer && typeof userAnswer === 'object') {
+          Object.entries(question.correctMapping).forEach(([item, correctCategory]) => {
+            Object.entries(userAnswer).forEach(([category, items]) => {
+              if (category === correctCategory && Array.isArray(items) && items.includes(item)) {
+                correctUserMappings++;
+              }
+            });
+          });
+        }
+
+        if (correctUserMappings === correctMappings) {
+          isCorrect = true;
+          correctAnswers++;
+          totalScore += questionPoints;
+        } else {
+          // Partial credit for drag-drop
+          totalScore += Math.floor((correctUserMappings / correctMappings) * questionPoints);
+        }
+      } else {
+        // Standard multiple choice
+        if (userAnswer === question.answerIndex) {
+          isCorrect = true;
+          correctAnswers++;
+          totalScore += questionPoints;
+        }
       }
     });
 
     return {
-      score: correctAnswers,
-      maxScore: gameData.quiz.questions.length,
+      score: totalScore,
+      maxScore,
       correctAnswers
     };
   };

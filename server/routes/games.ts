@@ -152,11 +152,18 @@ Use conversational but clear tone. Focus on deep understanding, practical applic
 CONTENT TO PROCESS:
 `;
 
-// Mock AI processing function (replace with actual OpenAI/Claude API call)
+// Enhanced AI processing function with media integration
 async function generateGameWithAI(text: string): Promise<any> {
   // Truncate text to fit in AI context window
   const processedText = truncateTextForAI(text, 6000);
-  
+
+  // Extract key concepts for media search
+  const keyConcepts = extractKeyConceptsFromText(processedText);
+
+  // Search for relevant media content
+  console.log('Searching for media content for concepts:', keyConcepts);
+  const mediaSearchResult = await searchMediaContent(processedText);
+
   // In production, replace this with actual AI API call
   // const response = await openai.chat.completions.create({
   //   messages: [{ role: "user", content: AI_PROMPT_TEMPLATE + processedText }],
@@ -164,97 +171,246 @@ async function generateGameWithAI(text: string): Promise<any> {
   //   temperature: 0.7,
   // });
   // return JSON.parse(response.choices[0].message.content);
-  
-  // Mock response for development
+
+  // Generate enhanced mock response with actual media content
+  const topicWords = processedText.split(' ').slice(0, 5);
+  const mainTopic = topicWords.join(' ');
+
   const mockGame = {
-    title: `Interactive Learning: ${text.split(' ').slice(0, 5).join(' ')}...`,
-    summary: "A comprehensive learning experience based on your uploaded content.",
-    learningObjectives: [
-      "Understand key concepts from the material",
-      "Apply knowledge through interactive scenarios",
-      "Test comprehension with engaging quizzes"
+    title: `Interactive Learning: ${mainTopic}...`,
+    summary: `Discover the fascinating world of ${keyConcepts[0] || 'learning'} through immersive multimedia experiences, hands-on simulations, and engaging challenges.`,
+    keyTopics: keyConcepts.slice(0, 3),
+    visualConcepts: [
+      `Visual representation of ${keyConcepts[0] || 'main concept'}`,
+      `Practical application of ${keyConcepts[1] || 'key principle'}`
     ],
+    learningObjectives: [
+      `Master the fundamental principles of ${keyConcepts[0] || 'the subject matter'}`,
+      "Apply theoretical knowledge to real-world scenarios",
+      "Analyze complex situations using evidence-based reasoning",
+      "Develop critical thinking skills through interactive challenges"
+    ],
+    mediaContent: {
+      headerImage: {
+        url: mediaSearchResult.images[0]?.url || 'https://images.unsplash.com/photo-1553895501-af9e282e7fc1?w=1200&q=80',
+        altText: mediaSearchResult.images[0]?.altText || `Visual introduction to ${keyConcepts[0] || 'learning'}`,
+        description: `Engaging visual that represents the core concepts of ${mainTopic}`,
+        searchTerms: keyConcepts.slice(0, 2),
+        purpose: "introduction"
+      },
+      conceptImages: mediaSearchResult.images.slice(1, 3).map((img, index) => ({
+        concept: keyConcepts[index] || `Concept ${index + 1}`,
+        url: img.url,
+        altText: img.altText,
+        description: `Visual explanation of ${keyConcepts[index] || `concept ${index + 1}`}`,
+        searchTerms: [keyConcepts[index] || 'concept'],
+        placement: `section${index + 1}`
+      })),
+      videos: mediaSearchResult.videos.slice(0, 2).map((vid, index) => ({
+        topic: `${keyConcepts[index] || 'Key concept'} in action`,
+        url: vid.url,
+        altText: vid.altText,
+        description: `Educational video demonstrating ${keyConcepts[index] || 'practical application'}`,
+        searchTerms: [keyConcepts[index] || 'application'],
+        placement: index === 0 ? "introduction" : "demonstration"
+      }))
+    },
     roleplay: {
-      scenario: "You are a student applying the concepts from this material in a real-world scenario.",
+      scenario: `You are a professional working in a field where ${keyConcepts[0] || 'these concepts'} are crucial for success. Your organization is facing a challenging situation that requires you to apply the principles you've learned.`,
+      backgroundImage: {
+        url: mediaSearchResult.images[3]?.url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
+        altText: mediaSearchResult.images[3]?.altText || 'Professional workplace scenario',
+        description: `Realistic workplace setting where ${keyConcepts[0] || 'concepts'} are applied`,
+        searchTerms: [keyConcepts[0] || 'workplace', 'professional']
+      },
       steps: [
         {
           id: "step1",
-          text: "You encounter a situation where you need to apply what you've learned. What's your approach?",
+          text: `A critical situation has emerged in your organization that directly relates to ${keyConcepts[0] || 'the concepts you\'ve studied'}. Stakeholders are looking to you for guidance. What's your initial approach?`,
+          mediaContent: {
+            image: {
+              url: mediaSearchResult.images[1]?.url || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80',
+              altText: 'Team meeting and discussion',
+              description: `Visual representation of decision-making in ${keyConcepts[0] || 'professional'} context`,
+              searchTerms: [keyConcepts[0] || 'decision', 'meeting']
+            }
+          },
           choices: [
             {
               id: "a",
-              label: "Apply the theoretical framework directly",
-              feedback: "Good start! Theoretical knowledge provides a solid foundation.",
-              nextStep: "step2"
+              label: `Apply the theoretical framework of ${keyConcepts[0] || 'established principles'} directly`,
+              feedback: `Excellent foundation! Starting with proven ${keyConcepts[0] || 'theoretical principles'} provides a solid base for decision-making. This shows you understand the core concepts and their systematic application.`,
+              nextStep: "step2",
+              points: 15
             },
             {
               id: "b",
-              label: "Consider the practical constraints first",
-              feedback: "Wise approach! Real-world application often requires adapting theory to practice.",
-              nextStep: "step2"
+              label: "Analyze the practical constraints and stakeholder needs first",
+              feedback: "Strategic thinking! Understanding the real-world context and stakeholder perspectives is crucial for successful implementation. This approach shows sophisticated practical wisdom.",
+              nextStep: "step2",
+              points: 12
             },
             {
               id: "c",
-              label: "Seek additional information before proceeding",
-              feedback: "Thoughtful! Gathering more context can lead to better decisions.",
-              nextStep: "step2"
+              label: "Gather additional data and expert opinions before proceeding",
+              feedback: "Thoughtful approach! Seeking diverse perspectives and comprehensive information reduces risk and improves decision quality. This demonstrates intellectual humility and thoroughness.",
+              nextStep: "step2",
+              points: 10
             }
           ]
         },
         {
           id: "step2",
-          text: "As you implement your approach, you face an unexpected challenge. How do you adapt?",
+          text: `As you implement your chosen approach, you discover that the situation is more complex than initially anticipated. There are conflicting priorities and unexpected challenges related to ${keyConcepts[1] || 'secondary factors'}. How do you adapt?`,
+          mediaContent: {
+            image: {
+              url: mediaSearchResult.images[2]?.url || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
+              altText: 'Complex problem solving',
+              description: 'Visual showing adaptive problem-solving and complexity management',
+              searchTerms: [keyConcepts[1] || 'complexity', 'adaptation']
+            }
+          },
           choices: [
             {
               id: "a",
-              label: "Revise your strategy based on new information",
-              feedback: "Excellent! Adaptability is key to successful problem-solving.",
-              nextStep: null
+              label: `Integrate insights from ${keyConcepts[1] || 'multiple perspectives'} to develop a hybrid solution`,
+              feedback: `Outstanding adaptive thinking! By synthesizing different approaches and incorporating ${keyConcepts[1] || 'multiple viewpoints'}, you demonstrate mastery of complex problem-solving. This flexibility is key to real-world success.`,
+              nextStep: null,
+              points: 20
             },
             {
               id: "b",
-              label: "Stick to your original plan",
-              feedback: "Sometimes persistence pays off, but flexibility often leads to better outcomes.",
-              nextStep: null
+              label: "Reassess priorities and adjust the strategy while maintaining core principles",
+              feedback: "Excellent balance! Maintaining your foundational principles while adapting to new information shows both consistency and flexibility—hallmarks of effective leadership.",
+              nextStep: null,
+              points: 18
+            },
+            {
+              id: "c",
+              label: "Consult with stakeholders to build consensus around a modified approach",
+              feedback: "Smart collaborative strategy! Engaging stakeholders in solution development not only improves the outcome but also builds buy-in and support for implementation.",
+              nextStep: null,
+              points: 15
             }
           ]
         }
       ]
     },
     quiz: {
-      theme: "Knowledge Quest",
+      theme: `${keyConcepts[0] || 'Knowledge'} Mastery Challenge`,
+      gameFormat: "multimedia-quest",
       questions: [
         {
           id: "q1",
-          question: "What is the most important takeaway from this material?",
+          type: "multiple-choice",
+          question: `What is the most critical factor when applying ${keyConcepts[0] || 'these concepts'} in professional settings?`,
           options: [
-            "The specific details and facts",
-            "The underlying principles and concepts",
-            "The historical context",
-            "The practical applications"
+            "Strict adherence to theoretical models",
+            "Balancing theory with practical constraints",
+            "Prioritizing stakeholder preferences",
+            "Following established organizational procedures"
           ],
           answerIndex: 1,
-          explanation: "While all aspects are important, understanding underlying principles helps you apply knowledge in various contexts."
+          explanation: `The most effective approach combines theoretical understanding with practical wisdom. While ${keyConcepts[0] || 'theoretical frameworks'} provide essential guidance, real-world application requires adapting these principles to specific contexts, constraints, and stakeholder needs.`,
+          mediaContent: {
+            image: {
+              url: mediaSearchResult.images[0]?.url || 'https://images.unsplash.com/photo-1553895501-af9e282e7fc1?w=400&q=80',
+              altText: `Visual representation of ${keyConcepts[0] || 'theory-practice'} integration`,
+              description: `Diagram showing the relationship between theory and practice in ${keyConcepts[0] || 'professional applications'}`,
+              searchTerms: [keyConcepts[0] || 'theory', 'practice']
+            }
+          },
+          difficulty: "medium",
+          points: 15
         },
         {
           id: "q2",
-          question: "How would you best apply this knowledge in practice?",
+          type: "multiple-choice",
+          question: `When facing ethical dilemmas related to ${keyConcepts[1] || 'key principles'}, what should be your primary consideration?`,
           options: [
-            "Memorize all the key points",
-            "Practice with similar examples",
-            "Teach it to someone else",
-            "All of the above"
+            "Immediate organizational benefits",
+            "Long-term consequences for all stakeholders",
+            "Personal career advancement",
+            "Industry standard practices"
           ],
-          answerIndex: 3,
-          explanation: "The best learning comes from multiple approaches: practice, teaching, and reinforcement."
+          answerIndex: 1,
+          explanation: `Ethical decision-making requires considering long-term consequences for all affected parties. This approach aligns with ${keyConcepts[1] || 'fundamental principles'} and ensures sustainable, responsible outcomes that build trust and credibility.`,
+          mediaContent: {
+            image: {
+              url: mediaSearchResult.images[1]?.url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+              altText: 'Ethical decision-making process',
+              description: `Visual guide to ethical reasoning in ${keyConcepts[1] || 'professional'} contexts`,
+              searchTerms: [keyConcepts[1] || 'ethics', 'decision-making']
+            }
+          },
+          difficulty: "hard",
+          points: 20
+        },
+        {
+          id: "q3",
+          type: "drag-drop",
+          question: `Organize these elements in order of priority when implementing ${keyConcepts[0] || 'key strategies'}:`,
+          items: [
+            "Stakeholder analysis",
+            "Risk assessment",
+            "Resource allocation",
+            "Implementation planning",
+            "Outcome measurement"
+          ],
+          categories: ["Phase 1: Foundation", "Phase 2: Execution", "Phase 3: Evaluation"],
+          correctMapping: {
+            "Stakeholder analysis": "Phase 1: Foundation",
+            "Risk assessment": "Phase 1: Foundation",
+            "Resource allocation": "Phase 2: Execution",
+            "Implementation planning": "Phase 2: Execution",
+            "Outcome measurement": "Phase 3: Evaluation"
+          },
+          explanation: `Effective implementation follows a logical sequence: foundation-building (stakeholder and risk analysis), execution (planning and resource allocation), and evaluation (measuring outcomes). This systematic approach ensures comprehensive coverage of critical factors.`,
+          difficulty: "hard",
+          points: 25
+        }
+      ]
+    },
+    gamification: {
+      achievements: [
+        {
+          id: "perfect_understanding",
+          name: "Perfect Understanding",
+          description: "Answered all questions correctly",
+          icon: "trophy",
+          condition: "perfect_score"
+        },
+        {
+          id: "strategic_thinker",
+          name: "Strategic Thinker",
+          description: "Demonstrated excellent strategic reasoning in roleplay",
+          icon: "brain",
+          condition: "high_roleplay_score"
+        },
+        {
+          id: "speed_learner",
+          name: "Speed Learner",
+          description: "Completed the module in record time",
+          icon: "zap",
+          condition: "fast_completion"
+        }
+      ],
+      progressMilestones: ["25%", "50%", "75%", "100%"],
+      bonusChallenges: [
+        {
+          title: `Real-World Application of ${keyConcepts[0] || 'Key Concepts'}`,
+          description: `Design a practical implementation plan for applying ${keyConcepts[0] || 'these concepts'} in your current work environment`,
+          points: 30
         }
       ]
     }
   };
 
   // Add some delay to simulate AI processing
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
+  await new Promise(resolve => setTimeout(resolve, 3000));
+
+  console.log('Generated enhanced game with', mediaSearchResult.totalFound, 'media items found');
+
   return mockGame;
 }
 

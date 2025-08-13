@@ -49,36 +49,20 @@ export default function Index() {
               <span className="text-xl font-bold text-gray-900">Loomify</span>
             </div>
             
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/upload"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-                >
-                  Create Game
-                </Link>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                <AuthButton
-                  variant="secondary"
-                  onClick={() => setAuthModal({ isOpen: true, mode: 'login' })}
-                >
-                  Sign In
-                </AuthButton>
-                <AuthButton
-                  onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                >
-                  Get Started
-                </AuthButton>
-              </div>
-            )}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setDemoModal(true)}
+                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Try Demo
+              </button>
+              <Link
+                to="/upload"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                Create Game
+              </Link>
+            </div>
           </div>
         </div>
       </nav>

@@ -83,23 +83,13 @@ export default function Index() {
               and quizzes that make learning fun, memorable, and effective.
             </p>
             
-            {user ? (
-              <Link
-                to="/upload"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-              >
-                Start Creating Games
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            ) : (
-              <button
-                onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-              >
-                Get Started Free
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-            )}
+            <Link
+              to="/upload"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              Start Creating Games
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
           </div>
         </div>
         

@@ -191,8 +191,7 @@ router.post('/process', async (req, res) => {
 
     const upload = await prisma.upload.findFirst({
       where: {
-        id: uploadId,
-        userId: req.user!.id
+        id: uploadId
       }
     });
 

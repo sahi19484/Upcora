@@ -501,93 +501,28 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   // Quiz Phase
   if (currentPhase === 'quiz') {
-    const question = gameData.quiz.questions[currentQuestion];
-    const isLastQuestion = currentQuestion === gameData.quiz.questions.length - 1;
-    const hasAnswered = selectedAnswers[question.id] !== undefined;
-
     return (
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="mb-6">
-          <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-2">{gameData.quiz.theme}</h2>
-            <div className="flex items-center justify-between">
-              <span>Question {currentQuestion + 1} of {gameData.quiz.questions.length}</span>
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4" />
-                <span>Take your time</span>
-              </div>
-            </div>
-          </div>
+      <div>
+        {/* Progress Visualization */}
+        <div className="max-w-4xl mx-auto p-6 pb-0">
+          <ProgressVisualization
+            currentStep={3}
+            totalSteps={3}
+            milestones={gameData.gamification?.progressMilestones || ['25%', '50%', '75%', '100%']}
+            className="mb-6"
+          />
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{question.question}</h3>
-          
-          <div className="space-y-3 mb-6">
-            {question.options.map((option, index) => {
-              const isSelected = selectedAnswers[question.id] === index;
-              const isCorrect = index === question.answerIndex;
-              const showResult = hasAnswered;
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => !hasAnswered && handleQuizAnswer(question.id, index)}
-                  disabled={hasAnswered}
-                  className={cn(
-                    'w-full text-left p-4 rounded-lg border transition-colors',
-                    !hasAnswered && 'hover:border-blue-300 hover:bg-blue-50',
-                    !hasAnswered && isSelected && 'border-blue-500 bg-blue-50',
-                    showResult && isCorrect && 'border-green-500 bg-green-50 text-green-800',
-                    showResult && isSelected && !isCorrect && 'border-red-500 bg-red-50 text-red-800',
-                    hasAnswered && 'cursor-not-allowed'
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <span>{option}</span>
-                    {showResult && isCorrect && <CheckCircle className="w-5 h-5 text-green-600" />}
-                    {showResult && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-red-600" />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {hasAnswered && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <h4 className="font-medium text-blue-800 mb-1">Explanation</h4>
-              <p className="text-blue-700">{question.explanation}</p>
-            </div>
-          )}
-
-          <div className="flex justify-between">
-            <button
-              onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
-              disabled={currentQuestion === 0}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            
-            {isLastQuestion ? (
-              <button
-                onClick={submitScore}
-                disabled={!hasAnswered}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Complete Quiz
-              </button>
-            ) : (
-              <button
-                onClick={() => setCurrentQuestion(currentQuestion + 1)}
-                disabled={!hasAnswered}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            )}
-          </div>
-        </div>
+        <InteractiveQuiz
+          questions={gameData.quiz.questions}
+          theme={gameData.quiz.theme}
+          gameFormat={gameData.quiz.gameFormat}
+          onAnswerSubmit={handleQuizAnswer}
+          onComplete={submitScore}
+          currentQuestion={currentQuestion}
+          setCurrentQuestion={setCurrentQuestion}
+          selectedAnswers={selectedAnswers}
+        />
       </div>
     );
   }

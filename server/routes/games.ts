@@ -9,70 +9,145 @@ const router = Router();
 
 // AI prompt template for generating games
 const AI_PROMPT_TEMPLATE = `
-You are a senior AI learning designer. The user has uploaded educational content. Your job is to:
+You are a senior AI learning designer specializing in multimedia educational experiences. The user has uploaded educational content. Your job is to:
 
 1. Extract the core ideas, topics, and learning objectives from the raw text
-2. Create an interactive game that includes:
-   - A roleplay simulation where the learner makes choices and receives feedback
-   - A creative quiz with a theme, multiple-choice questions, and explanations
+2. Identify key visual concepts that would benefit from images, videos, or animations
+3. Create an immersive interactive learning module that includes:
+   - Rich media content (images, videos, animations) strategically placed to enhance understanding
+   - A roleplay simulation with multimedia scenarios where the learner makes choices and receives feedback
+   - A creative quiz with visual elements, multiple-choice questions, and detailed explanations
+   - Interactive elements like drag-and-drop, hotspots, or mini-games
 
 Return the result in a structured JSON format as shown below:
 
 OUTPUT FORMAT (JSON):
 {
-  "title": "[Title based on uploaded content]",
-  "summary": "[Short summary of the document]",
-  "learningObjectives": ["Objective 1", "Objective 2", "..."],
+  "title": "[Engaging title based on uploaded content]",
+  "summary": "[Compelling summary that hooks the learner]",
+  "keyTopics": ["Topic 1", "Topic 2", "Topic 3"],
+  "visualConcepts": ["Concept that needs visualization", "Another visual concept"],
+  "learningObjectives": ["Specific, measurable objective 1", "Objective 2", "..."],
+  "mediaContent": {
+    "headerImage": {
+      "description": "[Description of ideal header image]",
+      "searchTerms": ["term1", "term2"],
+      "purpose": "introduction"
+    },
+    "conceptImages": [
+      {
+        "concept": "[Specific concept]",
+        "description": "[What the image should show]",
+        "searchTerms": ["term1", "term2"],
+        "placement": "section1"
+      }
+    ],
+    "videos": [
+      {
+        "topic": "[Video topic]",
+        "description": "[What the video should demonstrate]",
+        "searchTerms": ["term1", "term2"],
+        "placement": "introduction"
+      }
+    ]
+  },
   "roleplay": {
-    "scenario": "[Brief scenario putting learner in a role]",
+    "scenario": "[Immersive scenario with specific context and setting]",
+    "backgroundImage": {
+      "description": "[Description of scene-setting image]",
+      "searchTerms": ["term1", "term2"]
+    },
     "steps": [
       {
         "id": "step1",
-        "text": "[Situation text]",
+        "text": "[Rich, detailed situation text with specific context]",
+        "mediaContent": {
+          "image": {
+            "description": "[Image that supports this step]",
+            "searchTerms": ["term1", "term2"]
+          }
+        },
         "choices": [
           {
             "id": "a",
-            "label": "[Choice text]",
-            "feedback": "[Feedback after selecting this option]",
-            "nextStep": "step2"
+            "label": "[Realistic, specific choice]",
+            "feedback": "[Detailed feedback with reasoning and consequences]",
+            "nextStep": "step2",
+            "points": 10
           },
           {
             "id": "b",
-            "label": "[Choice text]",
-            "feedback": "[Feedback]",
-            "nextStep": "step2"
-          }
-        ]
-      },
-      {
-        "id": "step2",
-        "text": "[Next decision point]",
-        "choices": [
-          {
-            "id": "a",
-            "label": "[Choice]",
-            "feedback": "[Feedback]",
-            "nextStep": null
+            "label": "[Alternative realistic choice]",
+            "feedback": "[Constructive feedback explaining the outcome]",
+            "nextStep": "step2",
+            "points": 5
           }
         ]
       }
     ]
   },
   "quiz": {
-    "theme": "[Fun theme for quiz experience]",
+    "theme": "[Creative, engaging theme that matches content]",
+    "gameFormat": "visual-challenge",
     "questions": [
       {
         "id": "q1",
-        "question": "[Question text]",
-        "options": ["Option A", "Option B", "Option C"],
+        "type": "multiple-choice",
+        "question": "[Clear, thought-provoking question]",
+        "options": ["Option A", "Option B", "Option C", "Option D"],
         "answerIndex": 1,
-        "explanation": "[Short explanation of answer]"
+        "explanation": "[Comprehensive explanation with real-world application]",
+        "mediaContent": {
+          "image": {
+            "description": "[Supporting visual for this question]",
+            "searchTerms": ["term1", "term2"]
+          }
+        },
+        "difficulty": "medium",
+        "points": 10
+      },
+      {
+        "id": "q2",
+        "type": "drag-drop",
+        "question": "[Interactive question requiring categorization or sequencing]",
+        "items": ["Item 1", "Item 2", "Item 3"],
+        "categories": ["Category A", "Category B"],
+        "correctMapping": {"Item 1": "Category A", "Item 2": "Category B"},
+        "explanation": "[Detailed explanation of the correct categorization]",
+        "difficulty": "hard",
+        "points": 15
+      }
+    ]
+  },
+  "gamification": {
+    "achievements": [
+      {
+        "id": "perfect_understanding",
+        "name": "Perfect Understanding",
+        "description": "Answered all questions correctly",
+        "icon": "trophy",
+        "condition": "perfect_score"
+      }
+    ],
+    "progressMilestones": ["25%", "50%", "75%", "100%"],
+    "bonusChallenges": [
+      {
+        "title": "[Bonus challenge title]",
+        "description": "[What the learner needs to do]",
+        "points": 20
       }
     ]
   }
 }
 
-Use conversational but clear tone. The output should be engaging and accurate. Focus on deep understanding rather than memorization.
+Create an experience that is:
+- Visually rich and engaging
+- Pedagogically sound with clear learning progression
+- Interactive and hands-on
+- Memorable and impactful
+- Adaptive to different learning styles
+
+Use conversational but clear tone. Focus on deep understanding, practical application, and retention.
 
 CONTENT TO PROCESS:
 `;

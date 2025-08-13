@@ -122,7 +122,12 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
 
   const handleRoleplayChoice = (choice: any) => {
     setShowFeedback(choice.feedback);
-    
+
+    // Add points from roleplay choices
+    if (choice.points) {
+      setRoleplayScore(prev => prev + choice.points);
+    }
+
     setTimeout(() => {
       setShowFeedback(null);
       if (choice.nextStep) {
@@ -130,7 +135,7 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
       } else {
         setCurrentPhase('quiz');
       }
-    }, 3000);
+    }, 4000); // Slightly longer to read enhanced feedback
   };
 
   const handleQuizAnswer = (questionId: string, answerIndex: number) => {

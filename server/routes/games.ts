@@ -258,7 +258,7 @@ router.post('/process', async (req, res) => {
 });
 
 // Get game by ID
-router.get('/:gameId', authenticate, async (req: AuthRequest, res) => {
+router.get('/:gameId', async (req, res) => {
   try {
     const { gameId } = req.params;
 

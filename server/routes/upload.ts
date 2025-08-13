@@ -45,7 +45,7 @@ router.post('/file', upload.single('file'), async (req, res) => {
 
     const uploadRecord = await prisma.upload.create({
       data: {
-        userId: req.user!.id,
+        userId: 'anonymous', // Use anonymous user
         fileName: req.file.originalname,
         fileUrl: `memory://${req.file.originalname}`, // In production, save to S3/Supabase
         fileType: req.file.mimetype,

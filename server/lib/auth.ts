@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { Request, Response, NextFunction } from 'express';
 import prisma from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'quizcraft-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'loomify-secret-key-change-in-production';
 
 export interface AuthRequest extends Request {
   user?: {

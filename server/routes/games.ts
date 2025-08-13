@@ -264,8 +264,7 @@ router.get('/:gameId', async (req, res) => {
 
     const gameSession = await prisma.gameSession.findFirst({
       where: {
-        id: gameId,
-        userId: req.user!.id
+        id: gameId
       },
       include: {
         upload: {

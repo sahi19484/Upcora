@@ -46,7 +46,7 @@ export default function Index() {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Loomify</span>
+              <span className="text-xl font-bold text-gray-900">Upcora</span>
             </div>
             
             <div className="flex items-center space-x-3">
@@ -212,7 +212,7 @@ export default function Index() {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Loomify</span>
+              <span className="text-xl font-bold text-gray-900">Upcora</span>
             </div>
             <p className="text-gray-600 mb-4">
               AI-powered interactive learning platform

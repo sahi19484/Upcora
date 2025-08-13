@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle } from 'lucide-react';
-import { useAuthenticatedFetch } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 
 interface GameData {

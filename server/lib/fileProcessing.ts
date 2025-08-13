@@ -20,7 +20,21 @@ async function loadDependencies() {
       // Import pdf-parse with safer approach
       try {
         const pdfModule = await import('pdf-parse');
-        pdf = pdfModule.default || pdfModule;
+        // Handle different export patterns
+        if (typeof pdfModule.default === 'function') {
+          pdf = pdfModule.default;
+        } else if (typeof pdfModule === 'function') {
+          pdf = pdfModule;
+        } else if (pdfModule.default && typeof pdfModule.default.default === 'function') {
+          pdf = pdfModule.default.default;
+        } else {
+          console.warn('PDF module has unexpected structure:', Object.keys(pdfModule));
+          pdf = null;
+        }
+
+        if (pdf) {
+          console.log('PDF parsing library loaded successfully');
+        }
       } catch (pdfError) {
         console.warn('PDF parsing unavailable:', pdfError.message);
         pdf = null;

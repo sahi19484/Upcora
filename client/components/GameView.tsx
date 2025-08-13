@@ -2,31 +2,77 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 
+interface MediaContent {
+  url: string;
+  altText: string;
+  description?: string;
+  searchTerms?: string[];
+}
+
 interface GameData {
   title: string;
   summary: string;
+  keyTopics?: string[];
+  visualConcepts?: string[];
   learningObjectives: string[];
+  mediaContent?: {
+    headerImage?: MediaContent & { purpose: string };
+    conceptImages?: Array<MediaContent & { concept: string; placement: string }>;
+    videos?: Array<MediaContent & { topic: string; placement: string }>;
+  };
   roleplay: {
     scenario: string;
+    backgroundImage?: MediaContent;
     steps: Array<{
       id: string;
       text: string;
+      mediaContent?: {
+        image?: MediaContent;
+        video?: MediaContent;
+      };
       choices: Array<{
         id: string;
         label: string;
         feedback: string;
         nextStep: string | null;
+        points?: number;
       }>;
     }>;
   };
   quiz: {
     theme: string;
+    gameFormat?: string;
     questions: Array<{
       id: string;
+      type?: string;
       question: string;
-      options: string[];
-      answerIndex: number;
+      options?: string[];
+      answerIndex?: number;
+      items?: string[];
+      categories?: string[];
+      correctMapping?: Record<string, string>;
       explanation: string;
+      mediaContent?: {
+        image?: MediaContent;
+        video?: MediaContent;
+      };
+      difficulty?: string;
+      points?: number;
+    }>;
+  };
+  gamification?: {
+    achievements?: Array<{
+      id: string;
+      name: string;
+      description: string;
+      icon: string;
+      condition: string;
+    }>;
+    progressMilestones?: string[];
+    bonusChallenges?: Array<{
+      title: string;
+      description: string;
+      points: number;
     }>;
   };
 }

@@ -168,7 +168,7 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">QuizCraft Demo</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Loomify Demo</h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"

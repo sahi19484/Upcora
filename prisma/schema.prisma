@@ -70,8 +70,8 @@ model Score {
   id                String         @id @default(cuid())
   gameSession       GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
   gameSessionId     String
-  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String
+  user              User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?
   score             Int
   maxScore          Int
   timeSpent         Int            // in seconds

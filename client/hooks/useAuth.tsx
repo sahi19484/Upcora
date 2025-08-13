@@ -97,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           badges: parseBadges(data.user.badges)
         });
         setToken(data.token);
-        localStorage.setItem('loomify_token', data.token);
+        localStorage.setItem('upcora_token', data.token);
       } else {
         setError(data.error || 'Login failed');
       }
@@ -129,7 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           badges: parseBadges(data.user.badges)
         });
         setToken(data.token);
-        localStorage.setItem('loomify_token', data.token);
+        localStorage.setItem('upcora_token', data.token);
       } else {
         setError(data.error || 'Signup failed');
       }

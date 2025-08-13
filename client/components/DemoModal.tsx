@@ -372,7 +372,7 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
                     </div>
 
                     <p className="text-gray-600 mb-6">
-                      This is just a sample! With QuizCraft, you can upload any study material 
+                      This is just a sample! With Loomify, you can upload any study material
                       and our AI will create personalized learning games just like this one.
                     </p>
                   </div>

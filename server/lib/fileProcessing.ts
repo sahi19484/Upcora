@@ -12,7 +12,7 @@ declare module 'node-pptx' {
 // Lazy loading of dependencies to avoid bundling issues
 let pdf: any;
 let mammoth: any;
-let pptx: any;
+let jszip: any;
 
 async function loadDependencies() {
   try {
@@ -34,13 +34,13 @@ async function loadDependencies() {
         mammoth = null;
       }
     }
-    if (!pptx) {
+    if (!jszip) {
       try {
-        const pptxModule = await import('node-pptx');
-        pptx = pptxModule.default || pptxModule;
-      } catch (pptxError) {
-        console.warn('PowerPoint parsing unavailable:', pptxError.message);
-        pptx = null;
+        const jszipModule = await import('jszip');
+        jszip = jszipModule.default || jszipModule;
+      } catch (jszipError) {
+        console.warn('PowerPoint parsing unavailable:', jszipError.message);
+        jszip = null;
       }
     }
   } catch (error) {

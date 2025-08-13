@@ -40,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('quizcraft_token');
+    const savedToken = localStorage.getItem('loomify_token');
     if (savedToken) {
       setToken(savedToken);
       fetchUser(savedToken);

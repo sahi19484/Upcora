@@ -224,14 +224,6 @@ export default function Index() {
         </div>
       </footer>
 
-      {/* Auth Modal */}
-      <AuthModal
-        isOpen={authModal.isOpen}
-        onClose={() => setAuthModal({ ...authModal, isOpen: false })}
-        mode={authModal.mode}
-        onModeChange={(mode) => setAuthModal({ ...authModal, mode })}
-      />
-
       {/* Demo Modal */}
       <DemoModal
         isOpen={demoModal}

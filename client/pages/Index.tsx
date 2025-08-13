@@ -224,7 +224,7 @@ export default function Index() {
             Ready to Transform Your Learning?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already using QuizCraft to make studying more engaging and effective.
+            Join thousands of learners who are already using Loomify to make studying more engaging and effective.
           </p>
           
           {user ? (

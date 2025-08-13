@@ -220,24 +220,25 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
       case 'application/powerpoint':
       case 'application/x-mspowerpoint':
         try {
-          // For PPTX files, try to extract text from XML structure
+          // For PPTX files, use proper ZIP-based extraction
           if (mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
-            const textContent = buffer.toString('utf-8');
-            const xmlMatches = textContent.match(/<a:t[^>]*>([^<]+)<\/a:t>/g);
-            if (xmlMatches && xmlMatches.length > 0) {
-              const extractedTexts = xmlMatches
-                .map(match => match.replace(/<[^>]+>/g, ''))
-                .filter(t => t.trim().length > 0);
-              text = extractedTexts.join(' ');
-            } else {
-              throw new Error('No text content found in PowerPoint file');
-            }
+            text = await extractTextFromPPTX(buffer);
           } else {
-            // For PPT files, it's more complex - for now, inform user to use PPTX
-            throw new Error('Legacy PPT format not supported. Please save as PPTX format.');
+            // For legacy PPT files, inform user to use PPTX
+            throw new Error('Legacy PPT format not supported. Please save your PowerPoint as PPTX format for text extraction.');
           }
         } catch (pptError) {
-          throw new Error(`Failed to process PowerPoint: ${pptError.message}. Please try saving slides as a text file or convert to PPTX format.`);
+          if (pptError instanceof Error) {
+            if (pptError.message.includes('No text content found')) {
+              throw new Error('No readable text found in PowerPoint file. Please ensure your slides contain text content, or try saving each slide as a text file.');
+            } else if (pptError.message.includes('Legacy PPT format')) {
+              throw pptError;
+            } else {
+              throw new Error(`Failed to process PowerPoint: ${pptError.message}. Please try saving slides as a text file or ensure the file is a valid PPTX format.`);
+            }
+          } else {
+            throw new Error('Failed to process PowerPoint file. Please try saving slides as a text file or convert to PPTX format.');
+          }
         }
         break;
 

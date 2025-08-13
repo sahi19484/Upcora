@@ -107,7 +107,7 @@ export function FileUploader({ onUploadComplete, onError }: FileUploaderProps) {
       setUploadProgress(prev => prev ? { ...prev, status: 'error', error: 'Network error' } : null);
       onError('Network error');
     }
-  }, [urlInput, authenticatedFetch, onUploadComplete, onError]);
+  }, [urlInput, onUploadComplete, onError]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {

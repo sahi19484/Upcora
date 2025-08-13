@@ -31,8 +31,8 @@ model User {
 
 model Upload {
   id                String         @id @default(cuid())
-  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String
+  user              User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?
   fileName          String
   fileUrl           String
   fileType          String
@@ -41,9 +41,9 @@ model Upload {
   processedAt       DateTime?
   isProcessed       Boolean        @default(false)
   createdAt         DateTime       @default(now())
-  
+
   gameSessions      GameSession[]
-  
+
   @@map("uploads")
 }
 

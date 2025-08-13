@@ -138,10 +138,10 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
     }, 4000); // Slightly longer to read enhanced feedback
   };
 
-  const handleQuizAnswer = (questionId: string, answerIndex: number) => {
+  const handleQuizAnswer = (questionId: string, answer: any) => {
     setSelectedAnswers(prev => ({
       ...prev,
-      [questionId]: answerIndex
+      [questionId]: answer
     }));
   };
 

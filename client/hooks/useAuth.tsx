@@ -69,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     } catch (error) {
       console.error('Failed to fetch user:', error);
-      localStorage.removeItem('quizcraft_token');
+      localStorage.removeItem('loomify_token');
       setToken(null);
     } finally {
       setLoading(false);

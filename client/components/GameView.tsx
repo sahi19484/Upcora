@@ -46,8 +46,6 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  const authenticatedFetch = useAuthenticatedFetch();
 
   useEffect(() => {
     fetchGameData();

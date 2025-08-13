@@ -493,6 +493,7 @@ router.post('/process', async (req, res) => {
 router.get('/:gameId', async (req, res) => {
   try {
     const { gameId } = req.params;
+    console.log('Getting game with ID:', gameId);
 
     const gameSession = await prisma.gameSession.findFirst({
       where: {
@@ -513,9 +514,14 @@ router.get('/:gameId', async (req, res) => {
       }
     });
 
+    console.log('Game session found:', gameSession ? 'YES' : 'NO');
+
     if (!gameSession) {
+      console.log('Game not found for ID:', gameId);
       return res.status(404).json({ error: 'Game not found' });
     }
+
+    console.log('Returning game data for:', gameSession.title);
 
     res.json({
       gameId: gameSession.id,

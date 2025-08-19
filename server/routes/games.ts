@@ -7,147 +7,182 @@ import { searchMediaContent, MediaContent, extractKeyConceptsFromText } from '..
 
 const router = Router();
 
-// AI prompt template for generating games
+// Comprehensive Learning Experience Designer AI Prompt
 const AI_PROMPT_TEMPLATE = `
-You are a senior AI learning designer specializing in multimedia educational experiences. The user has uploaded educational content. Your job is to:
+You are a Learning Experience Designer AI. A user has uploaded educational content. Your task is to carefully read, analyze, and transform this document into a complete interactive learning journey.
 
-1. Extract the core ideas, topics, and learning objectives from the raw text
-2. Identify key visual concepts that would benefit from images, videos, or animations
-3. Create an immersive interactive learning module that includes:
-   - Rich media content (images, videos, animations) strategically placed to enhance understanding
-   - A roleplay simulation with multimedia scenarios where the learner makes choices and receives feedback
-   - A creative quiz with visual elements, multiple-choice questions, and detailed explanations
-   - Interactive elements like drag-and-drop, hotspots, or mini-games
+Break down the process into four parts: Learning Roadmap → Visual Diagrams → Gamified Learning Video → Quiz Game.
+Output must be structured in JSON + Markdown, so the frontend (built on Builder.io + React) can consume it easily.
 
-Return the result in a structured JSON format as shown below:
+🎯 Part 1: Learning Roadmap
+Read and understand the uploaded content deeply.
+Extract key concepts, topics, and skills.
+Organize them into a step-by-step roadmap: Modules → Lessons → Learning Objectives.
+Each step should include: title, summary (2–3 sentences), estimated_time (in minutes), difficulty_level (beginner, intermediate, advanced)
+
+🎨 Part 2: Visual 2D Diagrams
+For each key concept in the roadmap, generate 2D diagram instructions.
+The output should be structured text instructions that a diagram generator (e.g. Excalidraw API, Mermaid.js, or DALL·E for styled images) can use.
+Example formats: flowcharts, concept maps, step-by-step processes.
+
+📽️ Part 3: Gamified Learning Video
+Convert roadmap content into a script for a short animated 2D video.
+Style: engaging, gamified, story-driven.
+Output should include: script (dialogue + narration), scenes (with visual descriptions: characters, environment, transitions), visual_style (e.g. cartoonish, minimal, professional)
+
+🎮 Part 4: Quiz as a Game
+Create a final interactive quiz in gamified format.
+Quiz must be: Themed (e.g. escape room, treasure hunt, hero's journey), Interactive (multiple choice, true/false, drag/drop, sequencing), With feedback for each answer.
 
 OUTPUT FORMAT (JSON):
 {
-  "title": "[Engaging title based on uploaded content]",
-  "summary": "[Compelling summary that hooks the learner]",
-  "keyTopics": ["Topic 1", "Topic 2", "Topic 3"],
-  "visualConcepts": ["Concept that needs visualization", "Another visual concept"],
-  "learningObjectives": ["Specific, measurable objective 1", "Objective 2", "..."],
-  "mediaContent": {
-    "headerImage": {
-      "description": "[Description of ideal header image]",
-      "searchTerms": ["term1", "term2"],
-      "purpose": "introduction"
+  "title": "[Engaging title based on content]",
+  "summary": "[Compelling 2-3 sentence summary]",
+  "totalEstimatedTime": "[Total learning time in minutes]",
+
+  "roadmap": [
+    {
+      "module": "Introduction to X",
+      "moduleDescription": "Brief description of what this module covers",
+      "estimatedTime": "30 min",
+      "lessons": [
+        {
+          "title": "What is X?",
+          "summary": "Simple explanation of X and its importance.",
+          "estimatedTime": "10 min",
+          "difficultyLevel": "beginner",
+          "learningObjectives": ["Objective 1", "Objective 2"],
+          "keyTopics": ["Topic A", "Topic B"]
+        }
+      ]
+    }
+  ],
+
+  "diagrams": [
+    {
+      "topic": "How X Works",
+      "type": "flowchart",
+      "description": "Visual explanation of the X process",
+      "diagramCode": "graph TD; A[Input] --> B[Process]; B --> C[Output];",
+      "altText": "Flowchart showing the X process from input to output"
     },
-    "conceptImages": [
+    {
+      "topic": "X Framework",
+      "type": "concept-map",
+      "description": "Mind map of X components and relationships",
+      "diagramCode": "mindmap\n  root((X Framework))\n    Component A\n    Component B\n    Component C",
+      "altText": "Concept map of X framework components"
+    }
+  ],
+
+  "video": {
+    "title": "Journey Through X",
+    "visualStyle": "2D cartoon, colorful, fun",
+    "totalDuration": "3-5 minutes",
+    "scenes": [
       {
-        "concept": "[Specific concept]",
-        "description": "[What the image should show]",
-        "searchTerms": ["term1", "term2"],
-        "placement": "section1"
-      }
-    ],
-    "videos": [
-      {
-        "topic": "[Video topic]",
-        "description": "[What the video should demonstrate]",
-        "searchTerms": ["term1", "term2"],
-        "placement": "introduction"
+        "sceneNumber": 1,
+        "duration": "30 seconds",
+        "narration": "Welcome! Today you'll discover how X shapes our world.",
+        "visuals": "Animated character walking into a digital world.",
+        "characters": ["Friendly guide character"],
+        "environment": "Colorful digital landscape",
+        "transitions": "Smooth zoom-in from overview to detail"
       }
     ]
   },
-  "roleplay": {
-    "scenario": "[Immersive scenario with specific context and setting]",
-    "backgroundImage": {
-      "description": "[Description of scene-setting image]",
-      "searchTerms": ["term1", "term2"]
-    },
-    "steps": [
-      {
-        "id": "step1",
-        "text": "[Rich, detailed situation text with specific context]",
-        "mediaContent": {
-          "image": {
-            "description": "[Image that supports this step]",
-            "searchTerms": ["term1", "term2"]
-          }
-        },
-        "choices": [
-          {
-            "id": "a",
-            "label": "[Realistic, specific choice]",
-            "feedback": "[Detailed feedback with reasoning and consequences]",
-            "nextStep": "step2",
-            "points": 10
-          },
-          {
-            "id": "b",
-            "label": "[Alternative realistic choice]",
-            "feedback": "[Constructive feedback explaining the outcome]",
-            "nextStep": "step2",
-            "points": 5
-          }
-        ]
-      }
-    ]
-  },
+
   "quiz": {
-    "theme": "[Creative, engaging theme that matches content]",
-    "gameFormat": "visual-challenge",
+    "theme": "Treasure Hunt",
+    "description": "Navigate through challenges to find the knowledge treasure",
+    "totalQuestions": 5,
     "questions": [
       {
         "id": "q1",
-        "type": "multiple-choice",
-        "question": "[Clear, thought-provoking question]",
+        "question": "What is the primary purpose of X?",
+        "type": "multiple_choice",
         "options": ["Option A", "Option B", "Option C", "Option D"],
-        "answerIndex": 1,
-        "explanation": "[Comprehensive explanation with real-world application]",
-        "mediaContent": {
-          "image": {
-            "description": "[Supporting visual for this question]",
-            "searchTerms": ["term1", "term2"]
-          }
+        "correctAnswer": "Option B",
+        "correctIndex": 1,
+        "difficulty": "beginner",
+        "points": 10,
+        "feedback": {
+          "correct": "Excellent! You found the right treasure. X indeed serves this primary purpose because...",
+          "incorrect": "Oops, that's a trap! The correct answer is Option B because..."
         },
-        "difficulty": "medium",
-        "points": 10
+        "explanation": "Detailed explanation of why this is correct and how it applies in real-world scenarios."
       },
       {
         "id": "q2",
-        "type": "drag-drop",
-        "question": "[Interactive question requiring categorization or sequencing]",
-        "items": ["Item 1", "Item 2", "Item 3"],
-        "categories": ["Category A", "Category B"],
-        "correctMapping": {"Item 1": "Category A", "Item 2": "Category B"},
-        "explanation": "[Detailed explanation of the correct categorization]",
-        "difficulty": "hard",
-        "points": 15
+        "question": "Arrange these steps in the correct order for the X process:",
+        "type": "sequencing",
+        "items": ["Step 1", "Step 2", "Step 3", "Step 4"],
+        "correctOrder": [0, 2, 1, 3],
+        "difficulty": "intermediate",
+        "points": 15,
+        "feedback": {
+          "correct": "Perfect sequencing! You understand the logical flow of the X process.",
+          "incorrect": "Close, but the correct sequence is different. Remember that..."
+        }
+      },
+      {
+        "id": "q3",
+        "question": "Match these X components to their functions:",
+        "type": "drag_drop",
+        "items": ["Component A", "Component B", "Component C"],
+        "categories": ["Function 1", "Function 2", "Function 3"],
+        "correctMapping": {
+          "Component A": "Function 1",
+          "Component B": "Function 3",
+          "Component C": "Function 2"
+        },
+        "difficulty": "advanced",
+        "points": 20,
+        "feedback": {
+          "correct": "Brilliant matching! You clearly understand how each component works.",
+          "incorrect": "Good try! The correct pairings are based on..."
+        }
       }
     ]
   },
+
   "gamification": {
     "achievements": [
       {
-        "id": "perfect_understanding",
-        "name": "Perfect Understanding",
-        "description": "Answered all questions correctly",
+        "id": "roadmap_master",
+        "name": "Roadmap Master",
+        "description": "Completed all learning modules",
+        "icon": "map",
+        "condition": "complete_all_modules"
+      },
+      {
+        "id": "visual_learner",
+        "name": "Visual Learner",
+        "description": "Studied all diagrams thoroughly",
+        "icon": "eye",
+        "condition": "view_all_diagrams"
+      },
+      {
+        "id": "quiz_champion",
+        "name": "Quiz Champion",
+        "description": "Scored 90% or higher on the final quiz",
         "icon": "trophy",
-        "condition": "perfect_score"
+        "condition": "high_quiz_score"
       }
     ],
     "progressMilestones": ["25%", "50%", "75%", "100%"],
     "bonusChallenges": [
       {
-        "title": "[Bonus challenge title]",
-        "description": "[What the learner needs to do]",
-        "points": 20
+        "title": "Real-World Application",
+        "description": "Create your own example of X in action",
+        "points": 50,
+        "type": "creative_project"
       }
     ]
   }
 }
 
-Create an experience that is:
-- Visually rich and engaging
-- Pedagogically sound with clear learning progression
-- Interactive and hands-on
-- Memorable and impactful
-- Adaptive to different learning styles
-
-Use conversational but clear tone. Focus on deep understanding, practical application, and retention.
+Create an engaging, comprehensive learning experience that transforms the uploaded content into an interactive educational journey. Focus on clear learning progression, practical application, and memorable engagement.
 
 CONTENT TO PROCESS:
 `;

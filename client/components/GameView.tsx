@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle, Play, Award, Target, Zap } from 'lucide-react';
+import { Clock, Star, Trophy, ArrowRight, CheckCircle, XCircle, Play, Award, Target, Zap, BookOpen, Eye, Film } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { MediaDisplay, MediaGallery, ProgressVisualization } from './MediaDisplay';
 import { InteractiveQuiz } from './InteractiveQuiz';
+import { LearningRoadmap } from './LearningRoadmap';
+import { VisualDiagrams } from './VisualDiagrams';
+import { GamifiedVideo } from './GamifiedVideo';
 
 interface MediaContent {
   url: string;

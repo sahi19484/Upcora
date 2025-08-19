@@ -190,31 +190,37 @@ async function generateGameWithAI(text: string): Promise<any> {
       "Analyze complex situations using evidence-based reasoning",
       "Develop critical thinking skills through interactive challenges"
     ],
-    mediaContent: {
-      headerImage: {
-        url: mediaSearchResult.images[0]?.url || 'https://images.unsplash.com/photo-1553895501-af9e282e7fc1?w=1200&q=80',
-        altText: mediaSearchResult.images[0]?.altText || `Visual introduction to ${keyConcepts[0] || 'learning'}`,
-        description: `Engaging visual that represents the core concepts of ${mainTopic}`,
-        searchTerms: keyConcepts.slice(0, 2),
-        purpose: "introduction"
-      },
-      conceptImages: mediaSearchResult.images.slice(1, 3).map((img, index) => ({
-        concept: keyConcepts[index] || `Concept ${index + 1}`,
-        url: img.url,
-        altText: img.altText,
-        description: `Visual explanation of ${keyConcepts[index] || `concept ${index + 1}`}`,
-        searchTerms: [keyConcepts[index] || 'concept'],
-        placement: `section${index + 1}`
-      })),
-      videos: mediaSearchResult.videos.slice(0, 2).map((vid, index) => ({
-        topic: `${keyConcepts[index] || 'Key concept'} in action`,
-        url: vid.url,
-        altText: vid.altText,
-        description: `Educational video demonstrating ${keyConcepts[index] || 'practical application'}`,
-        searchTerms: [keyConcepts[index] || 'application'],
-        placement: index === 0 ? "introduction" : "demonstration"
-      }))
-    },
+    mediaContent: mediaSearchResult.totalFound > 0 ? {
+      ...(mediaSearchResult.images[0] && {
+        headerImage: {
+          url: mediaSearchResult.images[0].url,
+          altText: mediaSearchResult.images[0].altText,
+          description: `Engaging visual that represents the core concepts of ${mainTopic}`,
+          searchTerms: keyConcepts.slice(0, 2),
+          purpose: "introduction"
+        }
+      }),
+      ...(mediaSearchResult.images.length > 1 && {
+        conceptImages: mediaSearchResult.images.slice(1, 3).map((img, index) => ({
+          concept: keyConcepts[index] || `Concept ${index + 1}`,
+          url: img.url,
+          altText: img.altText,
+          description: `Visual explanation of ${keyConcepts[index] || `concept ${index + 1}`}`,
+          searchTerms: [keyConcepts[index] || 'concept'],
+          placement: `section${index + 1}`
+        }))
+      }),
+      ...(mediaSearchResult.videos.length > 0 && {
+        videos: mediaSearchResult.videos.slice(0, 2).map((vid, index) => ({
+          topic: `${keyConcepts[index] || 'Key concept'} in action`,
+          url: vid.url,
+          altText: vid.altText,
+          description: `Educational video demonstrating ${keyConcepts[index] || 'practical application'}`,
+          searchTerms: [keyConcepts[index] || 'application'],
+          placement: index === 0 ? "introduction" : "demonstration"
+        }))
+      })
+    } : undefined,
     roleplay: {
       scenario: `You are a professional working in a field where ${keyConcepts[0] || 'these concepts'} are crucial for success. Your organization is facing a challenging situation that requires you to apply the principles you've learned.`,
       backgroundImage: {

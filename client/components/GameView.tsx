@@ -143,9 +143,13 @@ interface GameViewProps {
 
 export function GameView({ gameId, onComplete }: GameViewProps) {
   const [gameData, setGameData] = useState<GameData | null>(null);
-  const [currentPhase, setCurrentPhase] = useState<'intro' | 'roleplay' | 'quiz' | 'complete'>('intro');
+  const [currentPhase, setCurrentPhase] = useState<'intro' | 'roadmap' | 'diagrams' | 'video' | 'roleplay' | 'quiz' | 'complete'>('intro');
   const [currentStep, setCurrentStep] = useState<string>('step1');
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentModule, setCurrentModule] = useState(0);
+  const [currentDiagram, setCurrentDiagram] = useState(0);
+  const [currentScene, setCurrentScene] = useState(0);
+  const [completedModules, setCompletedModules] = useState<number[]>([]);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, any>>({});
   const [showFeedback, setShowFeedback] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(null);

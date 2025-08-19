@@ -272,14 +272,16 @@ async function generateGameWithAI(text: string): Promise<any> {
         {
           id: "step2",
           text: `As you implement your chosen approach, you discover that the situation is more complex than initially anticipated. There are conflicting priorities and unexpected challenges related to ${keyConcepts[1] || 'secondary factors'}. How do you adapt?`,
-          mediaContent: {
-            image: {
-              url: mediaSearchResult.images[2]?.url || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
-              altText: 'Complex problem solving',
-              description: 'Visual showing adaptive problem-solving and complexity management',
-              searchTerms: [keyConcepts[1] || 'complexity', 'adaptation']
+          ...(mediaSearchResult.images[2] && {
+            mediaContent: {
+              image: {
+                url: mediaSearchResult.images[2].url,
+                altText: mediaSearchResult.images[2].altText,
+                description: 'Visual showing adaptive problem-solving and complexity management',
+                searchTerms: [keyConcepts[1] || 'complexity', 'adaptation']
+              }
             }
-          },
+          }),
           choices: [
             {
               id: "a",

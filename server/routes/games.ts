@@ -349,14 +349,16 @@ async function generateGameWithAI(text: string): Promise<any> {
           ],
           answerIndex: 1,
           explanation: `Ethical decision-making requires considering long-term consequences for all affected parties. This approach aligns with ${keyConcepts[1] || 'fundamental principles'} and ensures sustainable, responsible outcomes that build trust and credibility.`,
-          mediaContent: {
-            image: {
-              url: mediaSearchResult.images[1]?.url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-              altText: 'Ethical decision-making process',
-              description: `Visual guide to ethical reasoning in ${keyConcepts[1] || 'professional'} contexts`,
-              searchTerms: [keyConcepts[1] || 'ethics', 'decision-making']
+          ...(mediaSearchResult.images[1] && {
+            mediaContent: {
+              image: {
+                url: mediaSearchResult.images[1].url,
+                altText: mediaSearchResult.images[1].altText,
+                description: `Visual guide to ethical reasoning in ${keyConcepts[1] || 'professional'} contexts`,
+                searchTerms: [keyConcepts[1] || 'ethics', 'decision-making']
+              }
             }
-          },
+          }),
           difficulty: "hard",
           points: 20
         },

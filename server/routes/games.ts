@@ -448,81 +448,105 @@ async function generateGameWithAI(text: string): Promise<any> {
       ]
     },
     quiz: {
-      theme: `${keyConcepts[0] || 'Knowledge'} Mastery Challenge`,
-      gameFormat: "multimedia-quest",
+      theme: "Knowledge Quest: Treasure Hunt Adventure",
+      description: `Embark on an exciting treasure hunt through the realm of ${keyConcepts[0] || 'knowledge'}. Each correct answer brings you closer to the ultimate treasure - mastery of the subject!`,
+      totalQuestions: 5,
       questions: [
         {
           id: "q1",
-          type: "multiple-choice",
-          question: `What is the most critical factor when applying ${keyConcepts[0] || 'these concepts'} in professional settings?`,
+          question: `What is the fundamental purpose of ${keyConcepts[0] || 'the main concept'} in real-world applications?`,
+          type: "multiple_choice",
           options: [
-            "Strict adherence to theoretical models",
-            "Balancing theory with practical constraints",
-            "Prioritizing stakeholder preferences",
-            "Following established organizational procedures"
+            "To provide theoretical framework only",
+            "To bridge theory and practical implementation",
+            "To replace traditional methods entirely",
+            "To complicate existing processes"
           ],
-          answerIndex: 1,
-          explanation: `The most effective approach combines theoretical understanding with practical wisdom. While ${keyConcepts[0] || 'theoretical frameworks'} provide essential guidance, real-world application requires adapting these principles to specific contexts, constraints, and stakeholder needs.`,
-          ...(mediaSearchResult.images[0] && {
-            mediaContent: {
-              image: {
-                url: mediaSearchResult.images[0].url,
-                altText: mediaSearchResult.images[0].altText,
-                description: `Diagram showing the relationship between theory and practice in ${keyConcepts[0] || 'professional applications'}`,
-                searchTerms: [keyConcepts[0] || 'theory', 'practice']
-              }
-            }
-          }),
-          difficulty: "medium",
-          points: 15
+          correctAnswer: "To bridge theory and practical implementation",
+          correctIndex: 1,
+          difficulty: "beginner",
+          points: 10,
+          feedback: {
+            correct: `🎉 Excellent! You found the first treasure! ${keyConcepts[0] || 'This concept'} indeed serves as a crucial bridge between theoretical understanding and practical application. This foundational knowledge will serve you well on your journey.`,
+            incorrect: `💎 Close, but not quite the right treasure chest! The correct answer is that ${keyConcepts[0] || 'this concept'} bridges theory and practice. Remember, the most valuable implementations combine solid theoretical foundation with real-world applicability.`
+          },
+          explanation: `${keyConcepts[0] || 'This concept'} serves as a vital bridge between theoretical frameworks and practical implementation. It provides the structure needed to apply complex ideas in real-world scenarios while maintaining scientific rigor and effectiveness.`
         },
         {
           id: "q2",
-          type: "multiple-choice",
-          question: `When facing ethical dilemmas related to ${keyConcepts[1] || 'key principles'}, what should be your primary consideration?`,
-          options: [
-            "Immediate organizational benefits",
-            "Long-term consequences for all stakeholders",
-            "Personal career advancement",
-            "Industry standard practices"
+          question: `Arrange these steps in the correct order for implementing ${keyConcepts[1] || 'advanced techniques'}:`,
+          type: "sequencing",
+          items: [
+            "Evaluate outcomes and adjust",
+            "Gather requirements and constraints",
+            "Design implementation strategy",
+            "Execute planned approach"
           ],
-          answerIndex: 1,
-          explanation: `Ethical decision-making requires considering long-term consequences for all affected parties. This approach aligns with ${keyConcepts[1] || 'fundamental principles'} and ensures sustainable, responsible outcomes that build trust and credibility.`,
-          ...(mediaSearchResult.images[1] && {
-            mediaContent: {
-              image: {
-                url: mediaSearchResult.images[1].url,
-                altText: mediaSearchResult.images[1].altText,
-                description: `Visual guide to ethical reasoning in ${keyConcepts[1] || 'professional'} contexts`,
-                searchTerms: [keyConcepts[1] || 'ethics', 'decision-making']
-              }
-            }
-          }),
-          difficulty: "hard",
-          points: 20
+          correctOrder: [1, 2, 3, 0],
+          difficulty: "intermediate",
+          points: 15,
+          feedback: {
+            correct: `🗺️ Perfect sequencing, treasure hunter! You understand the logical flow of implementation. This systematic approach ensures success in complex projects.`,
+            incorrect: `🧭 Good attempt! The correct sequence follows the classic plan-design-execute-evaluate cycle. Start with gathering requirements, then design, execute, and finally evaluate outcomes.`
+          }
         },
         {
           id: "q3",
-          type: "drag-drop",
-          question: `Organize these elements in order of priority when implementing ${keyConcepts[0] || 'key strategies'}:`,
+          question: `Match these ${keyConcepts[2] || 'components'} to their primary functions:`,
+          type: "drag_drop",
           items: [
-            "Stakeholder analysis",
-            "Risk assessment",
-            "Resource allocation",
-            "Implementation planning",
-            "Outcome measurement"
+            `${keyConcepts[0] || 'Component A'}`,
+            `${keyConcepts[1] || 'Component B'}`,
+            `${keyConcepts[2] || 'Component C'}`
           ],
-          categories: ["Phase 1: Foundation", "Phase 2: Execution", "Phase 3: Evaluation"],
+          categories: [
+            "Foundation & Structure",
+            "Process & Implementation",
+            "Evaluation & Optimization"
+          ],
           correctMapping: {
-            "Stakeholder analysis": "Phase 1: Foundation",
-            "Risk assessment": "Phase 1: Foundation",
-            "Resource allocation": "Phase 2: Execution",
-            "Implementation planning": "Phase 2: Execution",
-            "Outcome measurement": "Phase 3: Evaluation"
+            [`${keyConcepts[0] || 'Component A'}`]: "Foundation & Structure",
+            [`${keyConcepts[1] || 'Component B'}`]: "Process & Implementation",
+            [`${keyConcepts[2] || 'Component C'}`]: "Evaluation & Optimization"
           },
-          explanation: `Effective implementation follows a logical sequence: foundation-building (stakeholder and risk analysis), execution (planning and resource allocation), and evaluation (measuring outcomes). This systematic approach ensures comprehensive coverage of critical factors.`,
-          difficulty: "hard",
-          points: 25
+          difficulty: "advanced",
+          points: 20,
+          feedback: {
+            correct: `🏆 Brilliant matching, master treasure hunter! You clearly understand how each component contributes to the overall system. This knowledge will be invaluable in complex problem-solving scenarios.`,
+            incorrect: `💡 Good thinking! The correct pairings follow the logical flow: foundation elements provide structure, process elements handle implementation, and evaluation elements ensure optimization.`
+          }
+        },
+        {
+          id: "q4",
+          question: `True or False: ${keyConcepts[0] || 'The main concept'} can be successfully applied without considering contextual factors.`,
+          type: "true_false",
+          correctAnswer: false,
+          difficulty: "intermediate",
+          points: 12,
+          feedback: {
+            correct: `✅ Absolutely right! Context is crucial for successful application. Understanding environmental factors, constraints, and specific requirements is essential for effective implementation.`,
+            incorrect: `❌ Not quite! Context is absolutely essential. ${keyConcepts[0] || 'This concept'} must be adapted to specific situations, considering environmental factors, stakeholder needs, and constraints for optimal results.`
+          }
+        },
+        {
+          id: "q5",
+          question: `What is the most important factor when evaluating the success of ${keyConcepts[0] || 'implementation efforts'}?`,
+          type: "multiple_choice",
+          options: [
+            "Speed of implementation",
+            "Cost efficiency only",
+            "Long-term sustainable outcomes",
+            "Popularity with stakeholders"
+          ],
+          correctAnswer: "Long-term sustainable outcomes",
+          correctIndex: 2,
+          difficulty: "advanced",
+          points: 25,
+          feedback: {
+            correct: `🎖️ Outstanding! You've found the ultimate treasure - wisdom! Long-term sustainability ensures that solutions continue to provide value over time, adapting to changing circumstances while maintaining effectiveness.`,
+            incorrect: `🔍 Think deeper, treasure seeker! While speed, cost, and popularity matter, long-term sustainable outcomes are the true measure of success. They ensure continued value and adaptability over time.`
+          },
+          explanation: `Long-term sustainable outcomes represent the highest measure of success because they demonstrate that the implementation not only works initially but continues to provide value, adapts to changing circumstances, and maintains effectiveness over time.`
         }
       ]
     },

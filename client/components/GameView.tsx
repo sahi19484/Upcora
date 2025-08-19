@@ -516,6 +516,54 @@ export function GameView({ gameId, onComplete }: GameViewProps) {
     );
   }
 
+  // Learning Roadmap Phase
+  if (currentPhase === 'roadmap' && gameData.roadmap) {
+    return (
+      <LearningRoadmap
+        roadmap={gameData.roadmap}
+        currentModule={currentModule}
+        completedModules={completedModules}
+        onModuleComplete={(moduleIndex) => {
+          setCompletedModules(prev => [...prev, moduleIndex]);
+        }}
+        onContinue={() => {
+          const hasDiagrams = gameData.diagrams && gameData.diagrams.length > 0;
+          const hasVideo = gameData.video && gameData.video.scenes && gameData.video.scenes.length > 0;
+          const nextPhase = hasDiagrams ? 'diagrams' : hasVideo ? 'video' : 'quiz';
+          setCurrentPhase(nextPhase);
+        }}
+      />
+    );
+  }
+
+  // Visual Diagrams Phase
+  if (currentPhase === 'diagrams' && gameData.diagrams) {
+    return (
+      <VisualDiagrams
+        diagrams={gameData.diagrams}
+        currentDiagram={currentDiagram}
+        onDiagramChange={setCurrentDiagram}
+        onContinue={() => {
+          const hasVideo = gameData.video && gameData.video.scenes && gameData.video.scenes.length > 0;
+          const nextPhase = hasVideo ? 'video' : 'quiz';
+          setCurrentPhase(nextPhase);
+        }}
+      />
+    );
+  }
+
+  // Gamified Video Phase
+  if (currentPhase === 'video' && gameData.video) {
+    return (
+      <GamifiedVideo
+        video={gameData.video}
+        currentScene={currentScene}
+        onSceneChange={setCurrentScene}
+        onContinue={() => setCurrentPhase('quiz')}
+      />
+    );
+  }
+
   // Roleplay Phase
   if (currentPhase === 'roleplay') {
     const step = gameData.roleplay.steps.find(s => s.id === currentStep);

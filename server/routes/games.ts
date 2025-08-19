@@ -1,9 +1,13 @@
-import { Router } from 'express';
-import { z } from 'zod';
-import prisma from '../lib/prisma';
-import { authenticate, AuthRequest } from '../lib/auth';
-import { truncateTextForAI } from '../lib/fileProcessing';
-import { searchMediaContent, MediaContent, extractKeyConceptsFromText } from '../lib/mediaService';
+import { Router } from "express";
+import { z } from "zod";
+import prisma from "../lib/prisma";
+import { authenticate, AuthRequest } from "../lib/auth";
+import { truncateTextForAI } from "../lib/fileProcessing";
+import {
+  searchMediaContent,
+  MediaContent,
+  extractKeyConceptsFromText,
+} from "../lib/mediaService";
 
 const router = Router();
 
@@ -196,7 +200,7 @@ async function generateGameWithAI(text: string): Promise<any> {
   const keyConcepts = extractKeyConceptsFromText(processedText);
 
   // Search for relevant media content
-  console.log('Searching for media content for concepts:', keyConcepts);
+  console.log("Searching for media content for concepts:", keyConcepts);
   const mediaSearchResult = await searchMediaContent(processedText);
 
   // In production, replace this with actual AI API call
@@ -208,20 +212,20 @@ async function generateGameWithAI(text: string): Promise<any> {
   // return JSON.parse(response.choices[0].message.content);
 
   // Generate comprehensive learning experience
-  const topicWords = processedText.split(' ').slice(0, 5);
-  const mainTopic = topicWords.join(' ');
+  const topicWords = processedText.split(" ").slice(0, 5);
+  const mainTopic = topicWords.join(" ");
   const totalLessons = Math.min(keyConcepts.length, 4);
   const estimatedTimePerLesson = 15;
 
   const mockGame = {
-    title: `Master ${keyConcepts[0] || 'Key Concepts'}: Interactive Learning Journey`,
-    summary: `Transform your understanding of ${keyConcepts[0] || 'essential concepts'} through a structured roadmap, visual diagrams, engaging video content, and gamified assessments. Complete this comprehensive learning experience in approximately ${totalLessons * estimatedTimePerLesson} minutes.`,
+    title: `Master ${keyConcepts[0] || "Key Concepts"}: Interactive Learning Journey`,
+    summary: `Transform your understanding of ${keyConcepts[0] || "essential concepts"} through a structured roadmap, visual diagrams, engaging video content, and gamified assessments. Complete this comprehensive learning experience in approximately ${totalLessons * estimatedTimePerLesson} minutes.`,
     totalEstimatedTime: `${totalLessons * estimatedTimePerLesson} min`,
 
     roadmap: [
       {
-        module: `Foundations of ${keyConcepts[0] || 'Core Concepts'}`,
-        moduleDescription: `Build your foundational understanding of ${keyConcepts[0] || 'essential principles'} and how they apply in real-world scenarios.`,
+        module: `Foundations of ${keyConcepts[0] || "Core Concepts"}`,
+        moduleDescription: `Build your foundational understanding of ${keyConcepts[0] || "essential principles"} and how they apply in real-world scenarios.`,
         estimatedTime: `${Math.ceil(totalLessons * estimatedTimePerLesson * 0.4)} min`,
         lessons: keyConcepts.slice(0, 2).map((concept, index) => ({
           title: `Understanding ${concept}`,
@@ -231,10 +235,14 @@ async function generateGameWithAI(text: string): Promise<any> {
           learningObjectives: [
             `Define and explain ${concept}`,
             `Identify key characteristics and features`,
-            `Apply basic principles in simple scenarios`
+            `Apply basic principles in simple scenarios`,
           ],
-          keyTopics: [concept, `${concept} applications`, `${concept} principles`]
-        }))
+          keyTopics: [
+            concept,
+            `${concept} applications`,
+            `${concept} principles`,
+          ],
+        })),
       },
       {
         module: `Advanced Applications and Integration`,
@@ -248,295 +256,330 @@ async function generateGameWithAI(text: string): Promise<any> {
           learningObjectives: [
             `Synthesize ${concept} with other principles`,
             `Solve complex problems using ${concept}`,
-            `Evaluate and critique applications`
+            `Evaluate and critique applications`,
           ],
-          keyTopics: [concept, `${concept} integration`, `${concept} problem-solving`]
-        }))
-      }
+          keyTopics: [
+            concept,
+            `${concept} integration`,
+            `${concept} problem-solving`,
+          ],
+        })),
+      },
     ],
 
     diagrams: keyConcepts.slice(0, 3).map((concept, index) => {
-      const diagramTypes = ['flowchart', 'concept-map', 'process-diagram'];
+      const diagramTypes = ["flowchart", "concept-map", "process-diagram"];
       const diagramType = diagramTypes[index % diagramTypes.length];
 
-      if (diagramType === 'flowchart') {
+      if (diagramType === "flowchart") {
         return {
           topic: `${concept} Process Flow`,
-          type: 'flowchart',
+          type: "flowchart",
           description: `Visual flowchart showing how ${concept} works step-by-step`,
           diagramCode: `graph TD; A[Start: ${concept}] --> B[Analysis Phase]; B --> C[Implementation]; C --> D[Evaluation]; D --> E[Optimization]; E --> F[Results];`,
-          altText: `Flowchart diagram illustrating the ${concept} process from start to results`
+          altText: `Flowchart diagram illustrating the ${concept} process from start to results`,
         };
-      } else if (diagramType === 'concept-map') {
+      } else if (diagramType === "concept-map") {
         return {
           topic: `${concept} Framework`,
-          type: 'concept-map',
+          type: "concept-map",
           description: `Mind map showing the relationships and components within ${concept}`,
           diagramCode: `mindmap\n  root((${concept}))\n    Core Elements\n      Element A\n      Element B\n    Applications\n      Use Case 1\n      Use Case 2\n    Benefits\n      Benefit A\n      Benefit B`,
-          altText: `Concept map displaying the framework and relationships of ${concept}`
+          altText: `Concept map displaying the framework and relationships of ${concept}`,
         };
       } else {
         return {
           topic: `${concept} Implementation Steps`,
-          type: 'process-diagram',
+          type: "process-diagram",
           description: `Step-by-step process diagram for implementing ${concept}`,
           diagramCode: `sequenceDiagram\n    participant User\n    participant System\n    participant ${concept}\n    User->>System: Initiate ${concept}\n    System->>${concept}: Process Request\n    ${concept}->>System: Return Results\n    System->>User: Display Outcome`,
-          altText: `Process diagram showing the implementation sequence for ${concept}`
+          altText: `Process diagram showing the implementation sequence for ${concept}`,
         };
       }
     }),
 
     video: {
-      title: `Journey Through ${keyConcepts[0] || 'Learning'}`,
-      visualStyle: "2D cartoon style with vibrant colors, friendly characters, and smooth animations",
+      title: `Journey Through ${keyConcepts[0] || "Learning"}`,
+      visualStyle:
+        "2D cartoon style with vibrant colors, friendly characters, and smooth animations",
       totalDuration: "4-5 minutes",
       scenes: [
         {
           sceneNumber: 1,
           duration: "45 seconds",
-          narration: `Welcome to your learning adventure! Today, we'll explore the fascinating world of ${keyConcepts[0] || 'essential concepts'}. Think of this as your personal guide through complex ideas made simple.`,
-          visuals: "Animated character (friendly mentor) appears in a colorful digital landscape with floating concept bubbles",
+          narration: `Welcome to your learning adventure! Today, we'll explore the fascinating world of ${keyConcepts[0] || "essential concepts"}. Think of this as your personal guide through complex ideas made simple.`,
+          visuals:
+            "Animated character (friendly mentor) appears in a colorful digital landscape with floating concept bubbles",
           characters: ["Wise mentor character with welcoming expression"],
-          environment: "Bright, welcoming digital space with animated knowledge symbols",
-          transitions: "Gentle zoom-in from cosmic view to personal learning space"
+          environment:
+            "Bright, welcoming digital space with animated knowledge symbols",
+          transitions:
+            "Gentle zoom-in from cosmic view to personal learning space",
         },
         {
           sceneNumber: 2,
           duration: "90 seconds",
-          narration: `Let's start with the foundation. ${keyConcepts[0] || 'Your first concept'} is like the building blocks of a house - everything else depends on understanding this well. Watch how it connects to real-world applications.`,
-          visuals: "Animated building blocks forming structures, with smooth transitions showing connections between concepts",
+          narration: `Let's start with the foundation. ${keyConcepts[0] || "Your first concept"} is like the building blocks of a house - everything else depends on understanding this well. Watch how it connects to real-world applications.`,
+          visuals:
+            "Animated building blocks forming structures, with smooth transitions showing connections between concepts",
           characters: ["Mentor character demonstrating with animated examples"],
-          environment: "Interactive workspace where concepts build upon each other",
-          transitions: "Smooth morphing from abstract concepts to concrete examples"
+          environment:
+            "Interactive workspace where concepts build upon each other",
+          transitions:
+            "Smooth morphing from abstract concepts to concrete examples",
         },
         {
           sceneNumber: 3,
           duration: "90 seconds",
-          narration: `Now that you understand the basics, let's see how ${keyConcepts[1] || 'advanced concepts'} build upon what you've learned. Notice how everything connects - that's the beauty of knowledge!`,
-          visuals: "Complex network of connections lighting up, showing relationships between different concepts",
+          narration: `Now that you understand the basics, let's see how ${keyConcepts[1] || "advanced concepts"} build upon what you've learned. Notice how everything connects - that's the beauty of knowledge!`,
+          visuals:
+            "Complex network of connections lighting up, showing relationships between different concepts",
           characters: ["Mentor guiding through connection pathways"],
-          environment: "Dynamic network visualization with glowing connection points",
-          transitions: "Flowing connections that pulse with energy as relationships are revealed"
+          environment:
+            "Dynamic network visualization with glowing connection points",
+          transitions:
+            "Flowing connections that pulse with energy as relationships are revealed",
         },
         {
           sceneNumber: 4,
           duration: "60 seconds",
           narration: `Ready for the challenge? You'll now apply everything you've learned in our interactive quiz. Remember, each question is an opportunity to solidify your understanding. Good luck!`,
-          visuals: "Transformation into game environment with quest elements and achievement indicators",
-          characters: ["Mentor transforming into game guide with encouraging gestures"],
-          environment: "Gamified quiz arena with treasure chests and progress indicators",
-          transitions: "Exciting transformation with sparkles and upbeat music cues"
-        }
-      ]
+          visuals:
+            "Transformation into game environment with quest elements and achievement indicators",
+          characters: [
+            "Mentor transforming into game guide with encouraging gestures",
+          ],
+          environment:
+            "Gamified quiz arena with treasure chests and progress indicators",
+          transitions:
+            "Exciting transformation with sparkles and upbeat music cues",
+        },
+      ],
     },
-    mediaContent: mediaSearchResult.totalFound > 0 ? {
-      ...(mediaSearchResult.images[0] && {
-        headerImage: {
-          url: mediaSearchResult.images[0].url,
-          altText: mediaSearchResult.images[0].altText,
-          description: `Engaging visual that represents the core concepts of ${mainTopic}`,
-          searchTerms: keyConcepts.slice(0, 2),
-          purpose: "introduction"
-        }
-      }),
-      ...(mediaSearchResult.images.length > 1 && {
-        conceptImages: mediaSearchResult.images.slice(1, 3).map((img, index) => ({
-          concept: keyConcepts[index] || `Concept ${index + 1}`,
-          url: img.url,
-          altText: img.altText,
-          description: `Visual explanation of ${keyConcepts[index] || `concept ${index + 1}`}`,
-          searchTerms: [keyConcepts[index] || 'concept'],
-          placement: `section${index + 1}`
-        }))
-      }),
-      ...(mediaSearchResult.videos.length > 0 && {
-        videos: mediaSearchResult.videos.slice(0, 2).map((vid, index) => ({
-          topic: `${keyConcepts[index] || 'Key concept'} in action`,
-          url: vid.url,
-          altText: vid.altText,
-          description: `Educational video demonstrating ${keyConcepts[index] || 'practical application'}`,
-          searchTerms: [keyConcepts[index] || 'application'],
-          placement: index === 0 ? "introduction" : "demonstration"
-        }))
-      })
-    } : undefined,
+    mediaContent:
+      mediaSearchResult.totalFound > 0
+        ? {
+            ...(mediaSearchResult.images[0] && {
+              headerImage: {
+                url: mediaSearchResult.images[0].url,
+                altText: mediaSearchResult.images[0].altText,
+                description: `Engaging visual that represents the core concepts of ${mainTopic}`,
+                searchTerms: keyConcepts.slice(0, 2),
+                purpose: "introduction",
+              },
+            }),
+            ...(mediaSearchResult.images.length > 1 && {
+              conceptImages: mediaSearchResult.images
+                .slice(1, 3)
+                .map((img, index) => ({
+                  concept: keyConcepts[index] || `Concept ${index + 1}`,
+                  url: img.url,
+                  altText: img.altText,
+                  description: `Visual explanation of ${keyConcepts[index] || `concept ${index + 1}`}`,
+                  searchTerms: [keyConcepts[index] || "concept"],
+                  placement: `section${index + 1}`,
+                })),
+            }),
+            ...(mediaSearchResult.videos.length > 0 && {
+              videos: mediaSearchResult.videos
+                .slice(0, 2)
+                .map((vid, index) => ({
+                  topic: `${keyConcepts[index] || "Key concept"} in action`,
+                  url: vid.url,
+                  altText: vid.altText,
+                  description: `Educational video demonstrating ${keyConcepts[index] || "practical application"}`,
+                  searchTerms: [keyConcepts[index] || "application"],
+                  placement: index === 0 ? "introduction" : "demonstration",
+                })),
+            }),
+          }
+        : undefined,
     roleplay: {
-      scenario: `You are a professional working in a field where ${keyConcepts[0] || 'these concepts'} are crucial for success. Your organization is facing a challenging situation that requires you to apply the principles you've learned.`,
+      scenario: `You are a professional working in a field where ${keyConcepts[0] || "these concepts"} are crucial for success. Your organization is facing a challenging situation that requires you to apply the principles you've learned.`,
       ...(mediaSearchResult.images[3] && {
         backgroundImage: {
           url: mediaSearchResult.images[3].url,
           altText: mediaSearchResult.images[3].altText,
-          description: `Realistic workplace setting where ${keyConcepts[0] || 'concepts'} are applied`,
-          searchTerms: [keyConcepts[0] || 'workplace', 'professional']
-        }
+          description: `Realistic workplace setting where ${keyConcepts[0] || "concepts"} are applied`,
+          searchTerms: [keyConcepts[0] || "workplace", "professional"],
+        },
       }),
       steps: [
         {
           id: "step1",
-          text: `A critical situation has emerged in your organization that directly relates to ${keyConcepts[0] || 'the concepts you\'ve studied'}. Stakeholders are looking to you for guidance. What's your initial approach?`,
+          text: `A critical situation has emerged in your organization that directly relates to ${keyConcepts[0] || "the concepts you've studied"}. Stakeholders are looking to you for guidance. What's your initial approach?`,
           ...(mediaSearchResult.images[1] && {
             mediaContent: {
               image: {
                 url: mediaSearchResult.images[1].url,
                 altText: mediaSearchResult.images[1].altText,
-                description: `Visual representation of decision-making in ${keyConcepts[0] || 'professional'} context`,
-                searchTerms: [keyConcepts[0] || 'decision', 'meeting']
-              }
-            }
+                description: `Visual representation of decision-making in ${keyConcepts[0] || "professional"} context`,
+                searchTerms: [keyConcepts[0] || "decision", "meeting"],
+              },
+            },
           }),
           choices: [
             {
               id: "a",
-              label: `Apply the theoretical framework of ${keyConcepts[0] || 'established principles'} directly`,
-              feedback: `Excellent foundation! Starting with proven ${keyConcepts[0] || 'theoretical principles'} provides a solid base for decision-making. This shows you understand the core concepts and their systematic application.`,
+              label: `Apply the theoretical framework of ${keyConcepts[0] || "established principles"} directly`,
+              feedback: `Excellent foundation! Starting with proven ${keyConcepts[0] || "theoretical principles"} provides a solid base for decision-making. This shows you understand the core concepts and their systematic application.`,
               nextStep: "step2",
-              points: 15
+              points: 15,
             },
             {
               id: "b",
-              label: "Analyze the practical constraints and stakeholder needs first",
-              feedback: "Strategic thinking! Understanding the real-world context and stakeholder perspectives is crucial for successful implementation. This approach shows sophisticated practical wisdom.",
+              label:
+                "Analyze the practical constraints and stakeholder needs first",
+              feedback:
+                "Strategic thinking! Understanding the real-world context and stakeholder perspectives is crucial for successful implementation. This approach shows sophisticated practical wisdom.",
               nextStep: "step2",
-              points: 12
+              points: 12,
             },
             {
               id: "c",
-              label: "Gather additional data and expert opinions before proceeding",
-              feedback: "Thoughtful approach! Seeking diverse perspectives and comprehensive information reduces risk and improves decision quality. This demonstrates intellectual humility and thoroughness.",
+              label:
+                "Gather additional data and expert opinions before proceeding",
+              feedback:
+                "Thoughtful approach! Seeking diverse perspectives and comprehensive information reduces risk and improves decision quality. This demonstrates intellectual humility and thoroughness.",
               nextStep: "step2",
-              points: 10
-            }
-          ]
+              points: 10,
+            },
+          ],
         },
         {
           id: "step2",
-          text: `As you implement your chosen approach, you discover that the situation is more complex than initially anticipated. There are conflicting priorities and unexpected challenges related to ${keyConcepts[1] || 'secondary factors'}. How do you adapt?`,
+          text: `As you implement your chosen approach, you discover that the situation is more complex than initially anticipated. There are conflicting priorities and unexpected challenges related to ${keyConcepts[1] || "secondary factors"}. How do you adapt?`,
           ...(mediaSearchResult.images[2] && {
             mediaContent: {
               image: {
                 url: mediaSearchResult.images[2].url,
                 altText: mediaSearchResult.images[2].altText,
-                description: 'Visual showing adaptive problem-solving and complexity management',
-                searchTerms: [keyConcepts[1] || 'complexity', 'adaptation']
-              }
-            }
+                description:
+                  "Visual showing adaptive problem-solving and complexity management",
+                searchTerms: [keyConcepts[1] || "complexity", "adaptation"],
+              },
+            },
           }),
           choices: [
             {
               id: "a",
-              label: `Integrate insights from ${keyConcepts[1] || 'multiple perspectives'} to develop a hybrid solution`,
-              feedback: `Outstanding adaptive thinking! By synthesizing different approaches and incorporating ${keyConcepts[1] || 'multiple viewpoints'}, you demonstrate mastery of complex problem-solving. This flexibility is key to real-world success.`,
+              label: `Integrate insights from ${keyConcepts[1] || "multiple perspectives"} to develop a hybrid solution`,
+              feedback: `Outstanding adaptive thinking! By synthesizing different approaches and incorporating ${keyConcepts[1] || "multiple viewpoints"}, you demonstrate mastery of complex problem-solving. This flexibility is key to real-world success.`,
               nextStep: null,
-              points: 20
+              points: 20,
             },
             {
               id: "b",
-              label: "Reassess priorities and adjust the strategy while maintaining core principles",
-              feedback: "Excellent balance! Maintaining your foundational principles while adapting to new information shows both consistency and flexibility—hallmarks of effective leadership.",
+              label:
+                "Reassess priorities and adjust the strategy while maintaining core principles",
+              feedback:
+                "Excellent balance! Maintaining your foundational principles while adapting to new information shows both consistency and flexibility—hallmarks of effective leadership.",
               nextStep: null,
-              points: 18
+              points: 18,
             },
             {
               id: "c",
-              label: "Consult with stakeholders to build consensus around a modified approach",
-              feedback: "Smart collaborative strategy! Engaging stakeholders in solution development not only improves the outcome but also builds buy-in and support for implementation.",
+              label:
+                "Consult with stakeholders to build consensus around a modified approach",
+              feedback:
+                "Smart collaborative strategy! Engaging stakeholders in solution development not only improves the outcome but also builds buy-in and support for implementation.",
               nextStep: null,
-              points: 15
-            }
-          ]
-        }
-      ]
+              points: 15,
+            },
+          ],
+        },
+      ],
     },
     quiz: {
       theme: "Knowledge Quest: Treasure Hunt Adventure",
-      description: `Embark on an exciting treasure hunt through the realm of ${keyConcepts[0] || 'knowledge'}. Each correct answer brings you closer to the ultimate treasure - mastery of the subject!`,
+      description: `Embark on an exciting treasure hunt through the realm of ${keyConcepts[0] || "knowledge"}. Each correct answer brings you closer to the ultimate treasure - mastery of the subject!`,
       totalQuestions: 5,
       questions: [
         {
           id: "q1",
-          question: `What is the fundamental purpose of ${keyConcepts[0] || 'the main concept'} in real-world applications?`,
+          question: `What is the fundamental purpose of ${keyConcepts[0] || "the main concept"} in real-world applications?`,
           type: "multiple_choice",
           options: [
             "To provide theoretical framework only",
             "To bridge theory and practical implementation",
             "To replace traditional methods entirely",
-            "To complicate existing processes"
+            "To complicate existing processes",
           ],
           correctAnswer: "To bridge theory and practical implementation",
           correctIndex: 1,
           difficulty: "beginner",
           points: 10,
           feedback: {
-            correct: `🎉 Excellent! You found the first treasure! ${keyConcepts[0] || 'This concept'} indeed serves as a crucial bridge between theoretical understanding and practical application. This foundational knowledge will serve you well on your journey.`,
-            incorrect: `💎 Close, but not quite the right treasure chest! The correct answer is that ${keyConcepts[0] || 'this concept'} bridges theory and practice. Remember, the most valuable implementations combine solid theoretical foundation with real-world applicability.`
+            correct: `🎉 Excellent! You found the first treasure! ${keyConcepts[0] || "This concept"} indeed serves as a crucial bridge between theoretical understanding and practical application. This foundational knowledge will serve you well on your journey.`,
+            incorrect: `💎 Close, but not quite the right treasure chest! The correct answer is that ${keyConcepts[0] || "this concept"} bridges theory and practice. Remember, the most valuable implementations combine solid theoretical foundation with real-world applicability.`,
           },
-          explanation: `${keyConcepts[0] || 'This concept'} serves as a vital bridge between theoretical frameworks and practical implementation. It provides the structure needed to apply complex ideas in real-world scenarios while maintaining scientific rigor and effectiveness.`
+          explanation: `${keyConcepts[0] || "This concept"} serves as a vital bridge between theoretical frameworks and practical implementation. It provides the structure needed to apply complex ideas in real-world scenarios while maintaining scientific rigor and effectiveness.`,
         },
         {
           id: "q2",
-          question: `Arrange these steps in the correct order for implementing ${keyConcepts[1] || 'advanced techniques'}:`,
+          question: `Arrange these steps in the correct order for implementing ${keyConcepts[1] || "advanced techniques"}:`,
           type: "sequencing",
           items: [
             "Evaluate outcomes and adjust",
             "Gather requirements and constraints",
             "Design implementation strategy",
-            "Execute planned approach"
+            "Execute planned approach",
           ],
           correctOrder: [1, 2, 3, 0],
           difficulty: "intermediate",
           points: 15,
           feedback: {
             correct: `🗺️ Perfect sequencing, treasure hunter! You understand the logical flow of implementation. This systematic approach ensures success in complex projects.`,
-            incorrect: `🧭 Good attempt! The correct sequence follows the classic plan-design-execute-evaluate cycle. Start with gathering requirements, then design, execute, and finally evaluate outcomes.`
-          }
+            incorrect: `🧭 Good attempt! The correct sequence follows the classic plan-design-execute-evaluate cycle. Start with gathering requirements, then design, execute, and finally evaluate outcomes.`,
+          },
         },
         {
           id: "q3",
-          question: `Match these ${keyConcepts[2] || 'components'} to their primary functions:`,
+          question: `Match these ${keyConcepts[2] || "components"} to their primary functions:`,
           type: "drag_drop",
           items: [
-            `${keyConcepts[0] || 'Component A'}`,
-            `${keyConcepts[1] || 'Component B'}`,
-            `${keyConcepts[2] || 'Component C'}`
+            `${keyConcepts[0] || "Component A"}`,
+            `${keyConcepts[1] || "Component B"}`,
+            `${keyConcepts[2] || "Component C"}`,
           ],
           categories: [
             "Foundation & Structure",
             "Process & Implementation",
-            "Evaluation & Optimization"
+            "Evaluation & Optimization",
           ],
           correctMapping: {
-            [`${keyConcepts[0] || 'Component A'}`]: "Foundation & Structure",
-            [`${keyConcepts[1] || 'Component B'}`]: "Process & Implementation",
-            [`${keyConcepts[2] || 'Component C'}`]: "Evaluation & Optimization"
+            [`${keyConcepts[0] || "Component A"}`]: "Foundation & Structure",
+            [`${keyConcepts[1] || "Component B"}`]: "Process & Implementation",
+            [`${keyConcepts[2] || "Component C"}`]: "Evaluation & Optimization",
           },
           difficulty: "advanced",
           points: 20,
           feedback: {
             correct: `🏆 Brilliant matching, master treasure hunter! You clearly understand how each component contributes to the overall system. This knowledge will be invaluable in complex problem-solving scenarios.`,
-            incorrect: `💡 Good thinking! The correct pairings follow the logical flow: foundation elements provide structure, process elements handle implementation, and evaluation elements ensure optimization.`
-          }
+            incorrect: `💡 Good thinking! The correct pairings follow the logical flow: foundation elements provide structure, process elements handle implementation, and evaluation elements ensure optimization.`,
+          },
         },
         {
           id: "q4",
-          question: `True or False: ${keyConcepts[0] || 'The main concept'} can be successfully applied without considering contextual factors.`,
+          question: `True or False: ${keyConcepts[0] || "The main concept"} can be successfully applied without considering contextual factors.`,
           type: "true_false",
           correctAnswer: false,
           difficulty: "intermediate",
           points: 12,
           feedback: {
             correct: `✅ Absolutely right! Context is crucial for successful application. Understanding environmental factors, constraints, and specific requirements is essential for effective implementation.`,
-            incorrect: `❌ Not quite! Context is absolutely essential. ${keyConcepts[0] || 'This concept'} must be adapted to specific situations, considering environmental factors, stakeholder needs, and constraints for optimal results.`
-          }
+            incorrect: `❌ Not quite! Context is absolutely essential. ${keyConcepts[0] || "This concept"} must be adapted to specific situations, considering environmental factors, stakeholder needs, and constraints for optimal results.`,
+          },
         },
         {
           id: "q5",
-          question: `What is the most important factor when evaluating the success of ${keyConcepts[0] || 'implementation efforts'}?`,
+          question: `What is the most important factor when evaluating the success of ${keyConcepts[0] || "implementation efforts"}?`,
           type: "multiple_choice",
           options: [
             "Speed of implementation",
             "Cost efficiency only",
             "Long-term sustainable outcomes",
-            "Popularity with stakeholders"
+            "Popularity with stakeholders",
           ],
           correctAnswer: "Long-term sustainable outcomes",
           correctIndex: 2,
@@ -544,122 +587,138 @@ async function generateGameWithAI(text: string): Promise<any> {
           points: 25,
           feedback: {
             correct: `🎖️ Outstanding! You've found the ultimate treasure - wisdom! Long-term sustainability ensures that solutions continue to provide value over time, adapting to changing circumstances while maintaining effectiveness.`,
-            incorrect: `🔍 Think deeper, treasure seeker! While speed, cost, and popularity matter, long-term sustainable outcomes are the true measure of success. They ensure continued value and adaptability over time.`
+            incorrect: `🔍 Think deeper, treasure seeker! While speed, cost, and popularity matter, long-term sustainable outcomes are the true measure of success. They ensure continued value and adaptability over time.`,
           },
-          explanation: `Long-term sustainable outcomes represent the highest measure of success because they demonstrate that the implementation not only works initially but continues to provide value, adapts to changing circumstances, and maintains effectiveness over time.`
-        }
-      ]
+          explanation: `Long-term sustainable outcomes represent the highest measure of success because they demonstrate that the implementation not only works initially but continues to provide value, adapts to changing circumstances, and maintains effectiveness over time.`,
+        },
+      ],
     },
     gamification: {
       achievements: [
         {
           id: "roadmap_master",
           name: "Roadmap Master",
-          description: "Successfully completed all learning modules in the roadmap",
+          description:
+            "Successfully completed all learning modules in the roadmap",
           icon: "map",
-          condition: "complete_all_modules"
+          condition: "complete_all_modules",
         },
         {
           id: "visual_learner",
           name: "Visual Learning Expert",
           description: "Studied and understood all concept diagrams thoroughly",
           icon: "eye",
-          condition: "view_all_diagrams"
+          condition: "view_all_diagrams",
         },
         {
           id: "video_scholar",
           name: "Video Learning Scholar",
           description: "Watched the complete gamified learning video",
           icon: "play",
-          condition: "complete_video"
+          condition: "complete_video",
         },
         {
           id: "quiz_champion",
           name: "Treasure Hunt Champion",
           description: "Scored 90% or higher on the final quiz adventure",
           icon: "trophy",
-          condition: "high_quiz_score"
+          condition: "high_quiz_score",
         },
         {
           id: "perfect_explorer",
           name: "Perfect Knowledge Explorer",
-          description: "Achieved 100% completion across all learning components",
+          description:
+            "Achieved 100% completion across all learning components",
           icon: "crown",
-          condition: "perfect_completion"
+          condition: "perfect_completion",
         },
         {
           id: "speed_learner",
           name: "Lightning Learner",
-          description: "Completed the entire learning journey in under 60 minutes",
+          description:
+            "Completed the entire learning journey in under 60 minutes",
           icon: "zap",
-          condition: "fast_completion"
-        }
+          condition: "fast_completion",
+        },
       ],
-      progressMilestones: ["25% - Foundation Built", "50% - Concepts Connected", "75% - Skills Applied", "100% - Mastery Achieved"],
+      progressMilestones: [
+        "25% - Foundation Built",
+        "50% - Concepts Connected",
+        "75% - Skills Applied",
+        "100% - Mastery Achieved",
+      ],
       bonusChallenges: [
         {
           title: "Real-World Innovation Challenge",
-          description: `Create an innovative application of ${keyConcepts[0] || 'these concepts'} in a real-world scenario. Document your approach and expected outcomes.`,
+          description: `Create an innovative application of ${keyConcepts[0] || "these concepts"} in a real-world scenario. Document your approach and expected outcomes.`,
           points: 50,
-          type: "creative_project"
+          type: "creative_project",
         },
         {
           title: "Peer Teaching Challenge",
           description: `Explain one key concept to someone else and get their feedback. Teaching others reinforces your own understanding.`,
           points: 30,
-          type: "social_learning"
+          type: "social_learning",
         },
         {
           title: "Critical Analysis Challenge",
           description: `Find a real-world example where these concepts were applied and analyze what worked well and what could be improved.`,
           points: 40,
-          type: "analytical_thinking"
-        }
-      ]
-    }
+          type: "analytical_thinking",
+        },
+      ],
+    },
   };
 
   // Add some delay to simulate AI processing
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  console.log('Generated enhanced game with', mediaSearchResult.totalFound, 'media items found');
+  console.log(
+    "Generated enhanced game with",
+    mediaSearchResult.totalFound,
+    "media items found",
+  );
 
   return mockGame;
 }
 
 // Process upload with AI to generate game
-router.post('/process', async (req, res) => {
+router.post("/process", async (req, res) => {
   try {
-    const { uploadId } = z.object({
-      uploadId: z.string()
-    }).parse(req.body);
+    const { uploadId } = z
+      .object({
+        uploadId: z.string(),
+      })
+      .parse(req.body);
 
     const upload = await prisma.upload.findFirst({
       where: {
-        id: uploadId
-      }
+        id: uploadId,
+      },
     });
 
     if (!upload) {
-      return res.status(404).json({ error: 'Upload not found' });
+      return res.status(404).json({ error: "Upload not found" });
     }
 
     if (!upload.extractedText) {
-      return res.status(400).json({ error: 'No text content available for processing' });
+      return res
+        .status(400)
+        .json({ error: "No text content available for processing" });
     }
 
     // Check if already processed
     const existingSession = await prisma.gameSession.findFirst({
       where: {
         uploadId: upload.id,
-        gameType: 'INTERACTIVE'
-      }
+        gameType: "INTERACTIVE",
+      },
     });
 
     if (existingSession) {
       return res.json({
         gameSessionId: existingSession.id,
-        message: 'Game already generated for this upload'
+        message: "Game already generated for this upload",
       });
     }
 
@@ -672,69 +731,72 @@ router.post('/process', async (req, res) => {
         uploadId: upload.id,
         userId: null,
         title: gameData.title,
-        gameType: 'INTERACTIVE',
-        gameData: JSON.stringify(gameData)
-      }
+        gameType: "INTERACTIVE",
+        gameData: JSON.stringify(gameData),
+      },
     });
 
     // Mark upload as processed
     await prisma.upload.update({
       where: { id: upload.id },
-      data: { 
+      data: {
         isProcessed: true,
-        processedAt: new Date()
-      }
+        processedAt: new Date(),
+      },
     });
 
     res.status(201).json({
       gameSessionId: gameSession.id,
       title: gameData.title,
-      message: 'Game generated successfully'
+      message: "Game generated successfully",
     });
   } catch (error) {
-    console.error('AI processing error:', error);
+    console.error("AI processing error:", error);
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: error.errors });
     }
-    res.status(500).json({ 
-      error: error instanceof Error ? error.message : 'Failed to process with AI' 
+    res.status(500).json({
+      error:
+        error instanceof Error ? error.message : "Failed to process with AI",
     });
   }
 });
 
 // Get game by ID
-router.get('/:gameId', async (req, res) => {
+router.get("/:gameId", async (req, res) => {
   try {
     const { gameId } = req.params;
-    console.log('Getting game with ID:', gameId);
+    console.log("Getting game with ID:", gameId);
 
     const gameSession = await prisma.gameSession.findFirst({
       where: {
-        id: gameId
+        id: gameId,
       },
       include: {
         upload: {
           select: {
             fileName: true,
             fileType: true,
-            createdAt: true
-          }
+            createdAt: true,
+          },
         },
         scores: {
-          orderBy: { createdAt: 'desc' },
-          take: 1
-        }
-      }
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+      },
     });
 
-    console.log('Game session found:', gameSession ? 'YES' : 'NO');
+    console.log("Game session found:", gameSession ? "YES" : "NO");
 
     if (!gameSession) {
-      console.log('Game not found for ID:', gameId);
-      return res.status(404).json({ error: 'Game not found' });
+      console.log("Game not found for ID:", gameId);
+      return res.status(404).json({ error: "Game not found" });
     }
 
-    console.log('Returning game data for:', gameSession.title);
+    console.log("Returning game data for:", gameSession.title);
 
     res.json({
       gameId: gameSession.id,
@@ -744,34 +806,36 @@ router.get('/:gameId', async (req, res) => {
       isCompleted: gameSession.isCompleted,
       upload: gameSession.upload,
       lastScore: gameSession.scores[0] || null,
-      createdAt: gameSession.createdAt
+      createdAt: gameSession.createdAt,
     });
   } catch (error) {
-    console.error('Get game error:', error);
-    res.status(500).json({ error: 'Failed to fetch game' });
+    console.error("Get game error:", error);
+    res.status(500).json({ error: "Failed to fetch game" });
   }
 });
 
 // Submit game score
-router.post('/:gameId/score', async (req, res) => {
+router.post("/:gameId/score", async (req, res) => {
   try {
     const { gameId } = req.params;
-    const scoreData = z.object({
-      score: z.number().min(0),
-      maxScore: z.number().min(1),
-      timeSpent: z.number().min(0),
-      correctAnswers: z.number().min(0),
-      totalQuestions: z.number().min(1)
-    }).parse(req.body);
+    const scoreData = z
+      .object({
+        score: z.number().min(0),
+        maxScore: z.number().min(1),
+        timeSpent: z.number().min(0),
+        correctAnswers: z.number().min(0),
+        totalQuestions: z.number().min(1),
+      })
+      .parse(req.body);
 
     const gameSession = await prisma.gameSession.findFirst({
       where: {
-        id: gameId
-      }
+        id: gameId,
+      },
     });
 
     if (!gameSession) {
-      return res.status(404).json({ error: 'Game not found' });
+      return res.status(404).json({ error: "Game not found" });
     }
 
     // Calculate XP and badges
@@ -780,22 +844,22 @@ router.post('/:gameId/score', async (req, res) => {
     const badges: string[] = [];
 
     if (percentage === 100) {
-      badges.push('Perfect Score');
+      badges.push("Perfect Score");
       xpEarned += 50; // Bonus XP
     } else if (percentage >= 90) {
-      badges.push('Excellence');
+      badges.push("Excellence");
       xpEarned += 20;
     } else if (percentage >= 75) {
-      badges.push('Great Job');
+      badges.push("Great Job");
       xpEarned += 10;
     }
 
     if (scoreData.timeSpent < 60) {
-      badges.push('Speed Learner');
+      badges.push("Speed Learner");
       xpEarned += 15;
     }
 
-    const badgesString = badges.join(',');
+    const badgesString = badges.join(",");
 
     // Save score
     const score = await prisma.score.create({
@@ -808,8 +872,8 @@ router.post('/:gameId/score', async (req, res) => {
         correctAnswers: scoreData.correctAnswers,
         totalQuestions: scoreData.totalQuestions,
         xpEarned,
-        badges: badgesString
-      }
+        badges: badgesString,
+      },
     });
 
     // No user XP update needed for anonymous users
@@ -819,8 +883,8 @@ router.post('/:gameId/score', async (req, res) => {
       where: { id: gameSession.id },
       data: {
         isCompleted: true,
-        completedAt: new Date()
-      }
+        completedAt: new Date(),
+      },
     });
 
     res.status(201).json({
@@ -828,19 +892,21 @@ router.post('/:gameId/score', async (req, res) => {
       xpEarned,
       badges,
       percentage: Math.round(percentage),
-      message: 'Score submitted successfully'
+      message: "Score submitted successfully",
     });
   } catch (error) {
-    console.error('Submit score error:', error);
+    console.error("Submit score error:", error);
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid score data', details: error.errors });
+      return res
+        .status(400)
+        .json({ error: "Invalid score data", details: error.errors });
     }
-    res.status(500).json({ error: 'Failed to submit score' });
+    res.status(500).json({ error: "Failed to submit score" });
   }
 });
 
 // Get user's game history
-router.get('/', authenticate, async (req: AuthRequest, res) => {
+router.get("/", authenticate, async (req: AuthRequest, res) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -849,25 +915,25 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
     const [games, total] = await Promise.all([
       prisma.gameSession.findMany({
         where: { userId: req.user!.id },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip,
         take: limit,
         include: {
           upload: {
             select: {
               fileName: true,
-              fileType: true
-            }
+              fileType: true,
+            },
           },
           scores: {
-            orderBy: { createdAt: 'desc' },
-            take: 1
-          }
-        }
+            orderBy: { createdAt: "desc" },
+            take: 1,
+          },
+        },
       }),
       prisma.gameSession.count({
-        where: { userId: req.user!.id }
-      })
+        where: { userId: req.user!.id },
+      }),
     ]);
 
     res.json({
@@ -876,12 +942,12 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
-    console.error('Get games error:', error);
-    res.status(500).json({ error: 'Failed to fetch games' });
+    console.error("Get games error:", error);
+    res.status(500).json({ error: "Failed to fetch games" });
   }
 });
 

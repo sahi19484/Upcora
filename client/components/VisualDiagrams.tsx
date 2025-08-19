@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Eye, ArrowRight, ArrowLeft, Maximize2, FileText, GitBranch, Workflow } from 'lucide-react';
-import { cn } from '../lib/utils';
+import React, { useState, useEffect } from "react";
+import {
+  Eye,
+  ArrowRight,
+  ArrowLeft,
+  Maximize2,
+  FileText,
+  GitBranch,
+  Workflow,
+} from "lucide-react";
+import { cn } from "../lib/utils";
 
 interface Diagram {
   topic: string;
@@ -17,34 +25,44 @@ interface VisualDiagramsProps {
   onContinue: () => void;
 }
 
-export function VisualDiagrams({ 
-  diagrams, 
-  currentDiagram, 
-  onDiagramChange, 
-  onContinue 
+export function VisualDiagrams({
+  diagrams,
+  currentDiagram,
+  onDiagramChange,
+  onContinue,
 }: VisualDiagramsProps) {
-  const [viewedDiagrams, setViewedDiagrams] = useState<Set<number>>(new Set([0]));
+  const [viewedDiagrams, setViewedDiagrams] = useState<Set<number>>(
+    new Set([0]),
+  );
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    setViewedDiagrams(prev => new Set([...prev, currentDiagram]));
+    setViewedDiagrams((prev) => new Set([...prev, currentDiagram]));
   }, [currentDiagram]);
 
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'flowchart': return <Workflow className="w-5 h-5" />;
-      case 'concept-map': return <GitBranch className="w-5 h-5" />;
-      case 'process-diagram': return <FileText className="w-5 h-5" />;
-      default: return <Eye className="w-5 h-5" />;
+      case "flowchart":
+        return <Workflow className="w-5 h-5" />;
+      case "concept-map":
+        return <GitBranch className="w-5 h-5" />;
+      case "process-diagram":
+        return <FileText className="w-5 h-5" />;
+      default:
+        return <Eye className="w-5 h-5" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'flowchart': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'concept-map': return 'bg-green-100 text-green-800 border-green-200';
-      case 'process-diagram': return 'bg-purple-100 text-purple-800 border-purple-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "flowchart":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "concept-map":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "process-diagram":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -77,11 +95,13 @@ export function VisualDiagrams({
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">🎨 Visual Learning Diagrams</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          🎨 Visual Learning Diagrams
+        </h1>
         <p className="text-lg text-gray-600 mb-6">
           Explore key concepts through interactive visual representations
         </p>
-        
+
         {/* Progress Indicator */}
         <div className="flex items-center justify-center space-x-2 mb-6">
           {diagrams.map((_, index) => (
@@ -91,8 +111,12 @@ export function VisualDiagrams({
               className={cn(
                 "w-3 h-3 rounded-full transition-all duration-200",
                 index === currentDiagram && "bg-blue-600 scale-125",
-                index !== currentDiagram && viewedDiagrams.has(index) && "bg-green-500",
-                index !== currentDiagram && !viewedDiagrams.has(index) && "bg-gray-300"
+                index !== currentDiagram &&
+                  viewedDiagrams.has(index) &&
+                  "bg-green-500",
+                index !== currentDiagram &&
+                  !viewedDiagrams.has(index) &&
+                  "bg-gray-300",
               )}
             />
           ))}
@@ -105,16 +129,24 @@ export function VisualDiagrams({
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <span className={cn(
-                "px-3 py-2 rounded-full text-sm font-medium border flex items-center space-x-2",
-                getTypeColor(currentDiagramData.type)
-              )}>
+              <span
+                className={cn(
+                  "px-3 py-2 rounded-full text-sm font-medium border flex items-center space-x-2",
+                  getTypeColor(currentDiagramData.type),
+                )}
+              >
                 {getTypeIcon(currentDiagramData.type)}
-                <span className="capitalize">{currentDiagramData.type.replace('-', ' ')}</span>
+                <span className="capitalize">
+                  {currentDiagramData.type.replace("-", " ")}
+                </span>
               </span>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">{currentDiagramData.topic}</h2>
-                <p className="text-gray-600">{currentDiagramData.description}</p>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {currentDiagramData.topic}
+                </h2>
+                <p className="text-gray-600">
+                  {currentDiagramData.description}
+                </p>
               </div>
             </div>
             <button
@@ -128,7 +160,10 @@ export function VisualDiagrams({
 
         {/* Diagram Content */}
         <div className="p-6">
-          {renderMermaidDiagram(currentDiagramData.diagramCode, currentDiagramData.topic)}
+          {renderMermaidDiagram(
+            currentDiagramData.diagramCode,
+            currentDiagramData.topic,
+          )}
         </div>
 
         {/* Diagram Footer */}
@@ -155,7 +190,9 @@ export function VisualDiagrams({
         </div>
 
         <button
-          onClick={() => onDiagramChange(Math.min(diagrams.length - 1, currentDiagram + 1))}
+          onClick={() =>
+            onDiagramChange(Math.min(diagrams.length - 1, currentDiagram + 1))
+          }
           disabled={currentDiagram === diagrams.length - 1}
           className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
@@ -173,8 +210,12 @@ export function VisualDiagrams({
             className={cn(
               "text-left p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md",
               index === currentDiagram && "border-blue-500 bg-blue-50",
-              index !== currentDiagram && viewedDiagrams.has(index) && "border-green-300 bg-green-50",
-              index !== currentDiagram && !viewedDiagrams.has(index) && "border-gray-200 hover:border-blue-300"
+              index !== currentDiagram &&
+                viewedDiagrams.has(index) &&
+                "border-green-300 bg-green-50",
+              index !== currentDiagram &&
+                !viewedDiagrams.has(index) &&
+                "border-gray-200 hover:border-blue-300",
             )}
           >
             <div className="flex items-center space-x-2 mb-2">
@@ -183,14 +224,18 @@ export function VisualDiagrams({
             </div>
             <p className="text-sm text-gray-600">{diagram.description}</p>
             <div className="mt-2 flex items-center space-x-2">
-              <span className={cn(
-                "px-2 py-1 rounded text-xs font-medium",
-                getTypeColor(diagram.type)
-              )}>
-                {diagram.type.replace('-', ' ')}
+              <span
+                className={cn(
+                  "px-2 py-1 rounded text-xs font-medium",
+                  getTypeColor(diagram.type),
+                )}
+              >
+                {diagram.type.replace("-", " ")}
               </span>
               {viewedDiagrams.has(index) && (
-                <span className="text-xs text-green-600 font-medium">✓ Studied</span>
+                <span className="text-xs text-green-600 font-medium">
+                  ✓ Studied
+                </span>
               )}
             </div>
           </button>
@@ -203,10 +248,13 @@ export function VisualDiagrams({
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <Eye className="w-6 h-6 text-green-600" />
-              <span className="text-lg font-semibold text-green-800">Visual Learning Complete!</span>
+              <span className="text-lg font-semibold text-green-800">
+                Visual Learning Complete!
+              </span>
             </div>
             <p className="text-green-700">
-              Great job! You've studied all the visual diagrams. Ready for the interactive video experience?
+              Great job! You've studied all the visual diagrams. Ready for the
+              interactive video experience?
             </p>
           </div>
           <button
@@ -225,7 +273,9 @@ export function VisualDiagrams({
         <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-6xl w-full max-h-full overflow-auto">
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold">{currentDiagramData.topic}</h3>
+              <h3 className="text-lg font-semibold">
+                {currentDiagramData.topic}
+              </h3>
               <button
                 onClick={() => setIsFullscreen(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -234,7 +284,10 @@ export function VisualDiagrams({
               </button>
             </div>
             <div className="p-6">
-              {renderMermaidDiagram(currentDiagramData.diagramCode, currentDiagramData.topic)}
+              {renderMermaidDiagram(
+                currentDiagramData.diagramCode,
+                currentDiagramData.topic,
+              )}
             </div>
           </div>
         </div>

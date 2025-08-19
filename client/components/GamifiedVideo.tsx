@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, ArrowRight, ArrowLeft, Users, Eye, Volume2, Clock } from 'lucide-react';
-import { cn } from '../lib/utils';
+import React, { useState, useEffect } from "react";
+import {
+  Play,
+  Pause,
+  ArrowRight,
+  ArrowLeft,
+  Users,
+  Eye,
+  Volume2,
+  Clock,
+} from "lucide-react";
+import { cn } from "../lib/utils";
 
 interface VideoScene {
   sceneNumber: number;
@@ -26,11 +35,11 @@ interface GamifiedVideoProps {
   onContinue: () => void;
 }
 
-export function GamifiedVideo({ 
-  video, 
-  currentScene, 
-  onSceneChange, 
-  onContinue 
+export function GamifiedVideo({
+  video,
+  currentScene,
+  onSceneChange,
+  onContinue,
 }: GamifiedVideoProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [watchedScenes, setWatchedScenes] = useState<Set<number>>(new Set());
@@ -40,7 +49,7 @@ export function GamifiedVideo({
   useEffect(() => {
     if (isPlaying && autoAdvance) {
       const timer = setTimeout(() => {
-        setWatchedScenes(prev => new Set([...prev, currentScene]));
+        setWatchedScenes((prev) => new Set([...prev, currentScene]));
         if (currentScene < video.scenes.length - 1) {
           onSceneChange(currentScene + 1);
           setProgress(0);
@@ -51,7 +60,7 @@ export function GamifiedVideo({
       }, 8000); // 8 seconds per scene for demo
 
       const progressTimer = setInterval(() => {
-        setProgress(prev => Math.min(prev + 1.25, 100)); // 100% over 8 seconds
+        setProgress((prev) => Math.min(prev + 1.25, 100)); // 100% over 8 seconds
       }, 100);
 
       return () => {
@@ -59,7 +68,13 @@ export function GamifiedVideo({
         clearInterval(progressTimer);
       };
     }
-  }, [isPlaying, currentScene, video.scenes.length, onSceneChange, autoAdvance]);
+  }, [
+    isPlaying,
+    currentScene,
+    video.scenes.length,
+    onSceneChange,
+    autoAdvance,
+  ]);
 
   const currentSceneData = video.scenes[currentScene];
   const allScenesWatched = watchedScenes.size === video.scenes.length;
@@ -67,7 +82,7 @@ export function GamifiedVideo({
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
     if (!isPlaying) {
-      setWatchedScenes(prev => new Set([...prev, currentScene]));
+      setWatchedScenes((prev) => new Set([...prev, currentScene]));
     }
   };
 
@@ -78,7 +93,7 @@ export function GamifiedVideo({
   };
 
   const getSceneVisual = (sceneNumber: number) => {
-    const visuals = ['🎬', '📚', '🎯', '🏆', '✨', '🌟'];
+    const visuals = ["🎬", "📚", "🎯", "🏆", "✨", "🌟"];
     return visuals[sceneNumber % visuals.length];
   };
 
@@ -86,9 +101,13 @@ export function GamifiedVideo({
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">🎬 Interactive Learning Video</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          🎬 Interactive Learning Video
+        </h1>
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold text-purple-900 mb-2">{video.title}</h2>
+          <h2 className="text-2xl font-semibold text-purple-900 mb-2">
+            {video.title}
+          </h2>
           <div className="grid md:grid-cols-2 gap-4 text-sm text-purple-800">
             <div className="flex items-center space-x-2">
               <Clock className="w-4 h-4" />
@@ -113,7 +132,8 @@ export function GamifiedVideo({
             </div>
             <div className="max-w-2xl mx-auto space-y-4">
               <h3 className="text-2xl font-bold text-white mb-4">
-                Scene {currentSceneData.sceneNumber}: {currentSceneData.environment}
+                Scene {currentSceneData.sceneNumber}:{" "}
+                {currentSceneData.environment}
               </h3>
               <div className="bg-black bg-opacity-50 rounded-lg p-6">
                 <p className="text-lg text-gray-100 leading-relaxed">
@@ -121,11 +141,18 @@ export function GamifiedVideo({
                 </p>
               </div>
               <div className="text-sm text-gray-300">
-                <p><strong>Visuals:</strong> {currentSceneData.visuals}</p>
+                <p>
+                  <strong>Visuals:</strong> {currentSceneData.visuals}
+                </p>
                 {currentSceneData.characters.length > 0 && (
-                  <p><strong>Characters:</strong> {currentSceneData.characters.join(', ')}</p>
+                  <p>
+                    <strong>Characters:</strong>{" "}
+                    {currentSceneData.characters.join(", ")}
+                  </p>
                 )}
-                <p><strong>Transitions:</strong> {currentSceneData.transitions}</p>
+                <p>
+                  <strong>Transitions:</strong> {currentSceneData.transitions}
+                </p>
               </div>
             </div>
           </div>
@@ -160,10 +187,14 @@ export function GamifiedVideo({
                 onClick={handlePlayPause}
                 className="flex items-center space-x-2 px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                <span>{isPlaying ? 'Pause' : 'Play'}</span>
+                {isPlaying ? (
+                  <Pause className="w-4 h-4" />
+                ) : (
+                  <Play className="w-4 h-4" />
+                )}
+                <span>{isPlaying ? "Pause" : "Play"}</span>
               </button>
-              
+
               <button
                 onClick={() => handleSceneSelect(Math.max(0, currentScene - 1))}
                 disabled={currentScene === 0}
@@ -171,9 +202,13 @@ export function GamifiedVideo({
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              
+
               <button
-                onClick={() => handleSceneSelect(Math.min(video.scenes.length - 1, currentScene + 1))}
+                onClick={() =>
+                  handleSceneSelect(
+                    Math.min(video.scenes.length - 1, currentScene + 1),
+                  )
+                }
                 disabled={currentScene === video.scenes.length - 1}
                 className="p-2 text-white hover:text-purple-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
@@ -193,7 +228,9 @@ export function GamifiedVideo({
               </label>
               <div className="flex items-center space-x-2">
                 <Volume2 className="w-4 h-4" />
-                <span className="text-sm">Scene {currentScene + 1} of {video.scenes.length}</span>
+                <span className="text-sm">
+                  Scene {currentScene + 1} of {video.scenes.length}
+                </span>
               </div>
             </div>
           </div>
@@ -202,7 +239,9 @@ export function GamifiedVideo({
 
       {/* Scene Timeline */}
       <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Video Timeline</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          Video Timeline
+        </h3>
         <div className="grid gap-4">
           {video.scenes.map((scene, index) => (
             <button
@@ -211,26 +250,38 @@ export function GamifiedVideo({
               className={cn(
                 "text-left p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md",
                 index === currentScene && "border-purple-500 bg-purple-50",
-                index !== currentScene && watchedScenes.has(index) && "border-green-300 bg-green-50",
-                index !== currentScene && !watchedScenes.has(index) && "border-gray-200 hover:border-purple-300"
+                index !== currentScene &&
+                  watchedScenes.has(index) &&
+                  "border-green-300 bg-green-50",
+                index !== currentScene &&
+                  !watchedScenes.has(index) &&
+                  "border-gray-200 hover:border-purple-300",
               )}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-3">
                   <div className="text-2xl">{getSceneVisual(index)}</div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Scene {scene.sceneNumber}</h4>
+                    <h4 className="font-semibold text-gray-900">
+                      Scene {scene.sceneNumber}
+                    </h4>
                     <p className="text-sm text-gray-600">{scene.environment}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs text-gray-500">{scene.duration}</span>
+                  <span className="text-xs text-gray-500">
+                    {scene.duration}
+                  </span>
                   {watchedScenes.has(index) && (
-                    <span className="text-xs text-green-600 font-medium">✓ Watched</span>
+                    <span className="text-xs text-green-600 font-medium">
+                      ✓ Watched
+                    </span>
                   )}
                 </div>
               </div>
-              <p className="text-sm text-gray-700 line-clamp-2">{scene.narration}</p>
+              <p className="text-sm text-gray-700 line-clamp-2">
+                {scene.narration}
+              </p>
             </button>
           ))}
         </div>
@@ -242,10 +293,13 @@ export function GamifiedVideo({
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <Play className="w-6 h-6 text-purple-600" />
-              <span className="text-lg font-semibold text-purple-800">Video Learning Complete!</span>
+              <span className="text-lg font-semibold text-purple-800">
+                Video Learning Complete!
+              </span>
             </div>
             <p className="text-purple-700">
-              Fantastic! You've experienced the complete learning journey. Ready for the final treasure hunt quiz?
+              Fantastic! You've experienced the complete learning journey. Ready
+              for the final treasure hunt quiz?
             </p>
           </div>
           <button

@@ -235,14 +235,16 @@ async function generateGameWithAI(text: string): Promise<any> {
         {
           id: "step1",
           text: `A critical situation has emerged in your organization that directly relates to ${keyConcepts[0] || 'the concepts you\'ve studied'}. Stakeholders are looking to you for guidance. What's your initial approach?`,
-          mediaContent: {
-            image: {
-              url: mediaSearchResult.images[1]?.url || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80',
-              altText: 'Team meeting and discussion',
-              description: `Visual representation of decision-making in ${keyConcepts[0] || 'professional'} context`,
-              searchTerms: [keyConcepts[0] || 'decision', 'meeting']
+          ...(mediaSearchResult.images[1] && {
+            mediaContent: {
+              image: {
+                url: mediaSearchResult.images[1].url,
+                altText: mediaSearchResult.images[1].altText,
+                description: `Visual representation of decision-making in ${keyConcepts[0] || 'professional'} context`,
+                searchTerms: [keyConcepts[0] || 'decision', 'meeting']
+              }
             }
-          },
+          }),
           choices: [
             {
               id: "a",

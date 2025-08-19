@@ -14,15 +14,58 @@ interface MediaContent {
 interface GameData {
   title: string;
   summary: string;
+  totalEstimatedTime?: string;
+
+  // Learning Roadmap
+  roadmap?: Array<{
+    module: string;
+    moduleDescription: string;
+    estimatedTime: string;
+    lessons: Array<{
+      title: string;
+      summary: string;
+      estimatedTime: string;
+      difficultyLevel: string;
+      learningObjectives: string[];
+      keyTopics: string[];
+    }>;
+  }>;
+
+  // Visual Diagrams
+  diagrams?: Array<{
+    topic: string;
+    type: string;
+    description: string;
+    diagramCode: string;
+    altText: string;
+  }>;
+
+  // Gamified Video
+  video?: {
+    title: string;
+    visualStyle: string;
+    totalDuration: string;
+    scenes: Array<{
+      sceneNumber: number;
+      duration: string;
+      narration: string;
+      visuals: string;
+      characters: string[];
+      environment: string;
+      transitions: string;
+    }>;
+  };
+
+  // Legacy fields for backward compatibility
   keyTopics?: string[];
   visualConcepts?: string[];
-  learningObjectives: string[];
+  learningObjectives?: string[];
   mediaContent?: {
     headerImage?: MediaContent & { purpose: string };
     conceptImages?: Array<MediaContent & { concept: string; placement: string }>;
     videos?: Array<MediaContent & { topic: string; placement: string }>;
   };
-  roleplay: {
+  roleplay?: {
     scenario: string;
     backgroundImage?: MediaContent;
     steps: Array<{
@@ -41,8 +84,12 @@ interface GameData {
       }>;
     }>;
   };
+
+  // Enhanced Quiz
   quiz: {
     theme: string;
+    description?: string;
+    totalQuestions?: number;
     gameFormat?: string;
     questions: Array<{
       id: string;
@@ -50,10 +97,17 @@ interface GameData {
       question: string;
       options?: string[];
       answerIndex?: number;
+      correctAnswer?: string;
+      correctIndex?: number;
+      correctOrder?: number[];
       items?: string[];
       categories?: string[];
       correctMapping?: Record<string, string>;
-      explanation: string;
+      explanation?: string;
+      feedback?: {
+        correct: string;
+        incorrect: string;
+      };
       mediaContent?: {
         image?: MediaContent;
         video?: MediaContent;
@@ -62,6 +116,8 @@ interface GameData {
       points?: number;
     }>;
   };
+
+  // Enhanced Gamification
   gamification?: {
     achievements?: Array<{
       id: string;
@@ -75,6 +131,7 @@ interface GameData {
       title: string;
       description: string;
       points: number;
+      type?: string;
     }>;
   };
 }

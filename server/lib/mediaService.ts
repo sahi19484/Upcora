@@ -85,57 +85,15 @@ export async function searchMediaContent(text: string): Promise<MediaSearchResul
   const queries = generateMediaSearchQueries(text, 3);
   const allMedia: MediaContent[] = [];
   
-  // Simulate API calls to external services (Unsplash, Pexels, YouTube, etc.)
-  for (const query of queries) {
-    try {
-      // Mock image search results
-      const mockImages: MediaContent[] = [
-        {
-          id: `img_${Date.now()}_1`,
-          type: 'image',
-          url: `https://images.unsplash.com/photo-1553895501-af9e282e7fc1?w=800&q=80`,
-          altText: `Illustration of ${query} concept`,
-          width: 800,
-          height: 600,
-          avgColor: '#4A90E2',
-          source: 'Unsplash',
-          relevanceScore: 0.9
-        },
-        {
-          id: `img_${Date.now()}_2`,
-          type: 'image',
-          url: `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80`,
-          altText: `Visual representation of ${query}`,
-          width: 800,
-          height: 600,
-          avgColor: '#2ECC71',
-          source: 'Unsplash',
-          relevanceScore: 0.8
-        }
-      ];
-      
-      // Mock video search results
-      const mockVideos: MediaContent[] = [
-        {
-          id: `vid_${Date.now()}_1`,
-          type: 'video',
-          url: `https://player.vimeo.com/video/76979871`,
-          altText: `Educational video about ${query}`,
-          width: 800,
-          height: 450,
-          source: 'Vimeo',
-          relevanceScore: 0.85
-        }
-      ];
-      
-      allMedia.push(...mockImages, ...mockVideos);
-      
-      // Add small delay to simulate API call
-      await new Promise(resolve => setTimeout(resolve, 100));
-    } catch (error) {
-      console.warn(`Failed to search media for query: ${query}`, error);
-    }
-  }
+  // For now, return empty results since we don't have real API integration
+  // This prevents showing irrelevant stock images
+  console.log('Media search queries generated:', queries);
+  console.log('Note: Real media API integration not configured. Skipping image search.');
+
+  // In production, implement real API calls here:
+  // - Unsplash API for educational images
+  // - YouTube/Vimeo API for educational videos
+  // - Custom educational content database
   
   // Sort by relevance score and separate by type
   const images = allMedia

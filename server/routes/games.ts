@@ -223,12 +223,14 @@ async function generateGameWithAI(text: string): Promise<any> {
     } : undefined,
     roleplay: {
       scenario: `You are a professional working in a field where ${keyConcepts[0] || 'these concepts'} are crucial for success. Your organization is facing a challenging situation that requires you to apply the principles you've learned.`,
-      backgroundImage: {
-        url: mediaSearchResult.images[3]?.url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
-        altText: mediaSearchResult.images[3]?.altText || 'Professional workplace scenario',
-        description: `Realistic workplace setting where ${keyConcepts[0] || 'concepts'} are applied`,
-        searchTerms: [keyConcepts[0] || 'workplace', 'professional']
-      },
+      ...(mediaSearchResult.images[3] && {
+        backgroundImage: {
+          url: mediaSearchResult.images[3].url,
+          altText: mediaSearchResult.images[3].altText,
+          description: `Realistic workplace setting where ${keyConcepts[0] || 'concepts'} are applied`,
+          searchTerms: [keyConcepts[0] || 'workplace', 'professional']
+        }
+      }),
       steps: [
         {
           id: "step1",

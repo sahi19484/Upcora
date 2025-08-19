@@ -553,33 +553,67 @@ async function generateGameWithAI(text: string): Promise<any> {
     gamification: {
       achievements: [
         {
-          id: "perfect_understanding",
-          name: "Perfect Understanding",
-          description: "Answered all questions correctly",
-          icon: "trophy",
-          condition: "perfect_score"
+          id: "roadmap_master",
+          name: "Roadmap Master",
+          description: "Successfully completed all learning modules in the roadmap",
+          icon: "map",
+          condition: "complete_all_modules"
         },
         {
-          id: "strategic_thinker",
-          name: "Strategic Thinker",
-          description: "Demonstrated excellent strategic reasoning in roleplay",
-          icon: "brain",
-          condition: "high_roleplay_score"
+          id: "visual_learner",
+          name: "Visual Learning Expert",
+          description: "Studied and understood all concept diagrams thoroughly",
+          icon: "eye",
+          condition: "view_all_diagrams"
+        },
+        {
+          id: "video_scholar",
+          name: "Video Learning Scholar",
+          description: "Watched the complete gamified learning video",
+          icon: "play",
+          condition: "complete_video"
+        },
+        {
+          id: "quiz_champion",
+          name: "Treasure Hunt Champion",
+          description: "Scored 90% or higher on the final quiz adventure",
+          icon: "trophy",
+          condition: "high_quiz_score"
+        },
+        {
+          id: "perfect_explorer",
+          name: "Perfect Knowledge Explorer",
+          description: "Achieved 100% completion across all learning components",
+          icon: "crown",
+          condition: "perfect_completion"
         },
         {
           id: "speed_learner",
-          name: "Speed Learner",
-          description: "Completed the module in record time",
+          name: "Lightning Learner",
+          description: "Completed the entire learning journey in under 60 minutes",
           icon: "zap",
           condition: "fast_completion"
         }
       ],
-      progressMilestones: ["25%", "50%", "75%", "100%"],
+      progressMilestones: ["25% - Foundation Built", "50% - Concepts Connected", "75% - Skills Applied", "100% - Mastery Achieved"],
       bonusChallenges: [
         {
-          title: `Real-World Application of ${keyConcepts[0] || 'Key Concepts'}`,
-          description: `Design a practical implementation plan for applying ${keyConcepts[0] || 'these concepts'} in your current work environment`,
-          points: 30
+          title: "Real-World Innovation Challenge",
+          description: `Create an innovative application of ${keyConcepts[0] || 'these concepts'} in a real-world scenario. Document your approach and expected outcomes.`,
+          points: 50,
+          type: "creative_project"
+        },
+        {
+          title: "Peer Teaching Challenge",
+          description: `Explain one key concept to someone else and get their feedback. Teaching others reinforces your own understanding.`,
+          points: 30,
+          type: "social_learning"
+        },
+        {
+          title: "Critical Analysis Challenge",
+          description: `Find a real-world example where these concepts were applied and analyze what worked well and what could be improved.`,
+          points: 40,
+          type: "analytical_thinking"
         }
       ]
     }

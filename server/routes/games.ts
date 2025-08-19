@@ -324,14 +324,16 @@ async function generateGameWithAI(text: string): Promise<any> {
           ],
           answerIndex: 1,
           explanation: `The most effective approach combines theoretical understanding with practical wisdom. While ${keyConcepts[0] || 'theoretical frameworks'} provide essential guidance, real-world application requires adapting these principles to specific contexts, constraints, and stakeholder needs.`,
-          mediaContent: {
-            image: {
-              url: mediaSearchResult.images[0]?.url || 'https://images.unsplash.com/photo-1553895501-af9e282e7fc1?w=400&q=80',
-              altText: `Visual representation of ${keyConcepts[0] || 'theory-practice'} integration`,
-              description: `Diagram showing the relationship between theory and practice in ${keyConcepts[0] || 'professional applications'}`,
-              searchTerms: [keyConcepts[0] || 'theory', 'practice']
+          ...(mediaSearchResult.images[0] && {
+            mediaContent: {
+              image: {
+                url: mediaSearchResult.images[0].url,
+                altText: mediaSearchResult.images[0].altText,
+                description: `Diagram showing the relationship between theory and practice in ${keyConcepts[0] || 'professional applications'}`,
+                searchTerms: [keyConcepts[0] || 'theory', 'practice']
+              }
             }
-          },
+          }),
           difficulty: "medium",
           points: 15
         },

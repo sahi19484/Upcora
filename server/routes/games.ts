@@ -207,24 +207,128 @@ async function generateGameWithAI(text: string): Promise<any> {
   // });
   // return JSON.parse(response.choices[0].message.content);
 
-  // Generate enhanced mock response with actual media content
+  // Generate comprehensive learning experience
   const topicWords = processedText.split(' ').slice(0, 5);
   const mainTopic = topicWords.join(' ');
+  const totalLessons = Math.min(keyConcepts.length, 4);
+  const estimatedTimePerLesson = 15;
 
   const mockGame = {
-    title: `Interactive Learning: ${mainTopic}...`,
-    summary: `Discover the fascinating world of ${keyConcepts[0] || 'learning'} through immersive multimedia experiences, hands-on simulations, and engaging challenges.`,
-    keyTopics: keyConcepts.slice(0, 3),
-    visualConcepts: [
-      `Visual representation of ${keyConcepts[0] || 'main concept'}`,
-      `Practical application of ${keyConcepts[1] || 'key principle'}`
+    title: `Master ${keyConcepts[0] || 'Key Concepts'}: Interactive Learning Journey`,
+    summary: `Transform your understanding of ${keyConcepts[0] || 'essential concepts'} through a structured roadmap, visual diagrams, engaging video content, and gamified assessments. Complete this comprehensive learning experience in approximately ${totalLessons * estimatedTimePerLesson} minutes.`,
+    totalEstimatedTime: `${totalLessons * estimatedTimePerLesson} min`,
+
+    roadmap: [
+      {
+        module: `Foundations of ${keyConcepts[0] || 'Core Concepts'}`,
+        moduleDescription: `Build your foundational understanding of ${keyConcepts[0] || 'essential principles'} and how they apply in real-world scenarios.`,
+        estimatedTime: `${Math.ceil(totalLessons * estimatedTimePerLesson * 0.4)} min`,
+        lessons: keyConcepts.slice(0, 2).map((concept, index) => ({
+          title: `Understanding ${concept}`,
+          summary: `Explore the fundamental principles and practical applications of ${concept}. Learn how it impacts various aspects of the field.`,
+          estimatedTime: `${estimatedTimePerLesson} min`,
+          difficultyLevel: index === 0 ? "beginner" : "intermediate",
+          learningObjectives: [
+            `Define and explain ${concept}`,
+            `Identify key characteristics and features`,
+            `Apply basic principles in simple scenarios`
+          ],
+          keyTopics: [concept, `${concept} applications`, `${concept} principles`]
+        }))
+      },
+      {
+        module: `Advanced Applications and Integration`,
+        moduleDescription: `Dive deeper into advanced concepts and learn how to integrate your knowledge for complex problem-solving.`,
+        estimatedTime: `${Math.floor(totalLessons * estimatedTimePerLesson * 0.6)} min`,
+        lessons: keyConcepts.slice(2, 4).map((concept, index) => ({
+          title: `Advanced ${concept}`,
+          summary: `Master advanced techniques and integrate ${concept} with other concepts for comprehensive understanding.`,
+          estimatedTime: `${estimatedTimePerLesson} min`,
+          difficultyLevel: "advanced",
+          learningObjectives: [
+            `Synthesize ${concept} with other principles`,
+            `Solve complex problems using ${concept}`,
+            `Evaluate and critique applications`
+          ],
+          keyTopics: [concept, `${concept} integration`, `${concept} problem-solving`]
+        }))
+      }
     ],
-    learningObjectives: [
-      `Master the fundamental principles of ${keyConcepts[0] || 'the subject matter'}`,
-      "Apply theoretical knowledge to real-world scenarios",
-      "Analyze complex situations using evidence-based reasoning",
-      "Develop critical thinking skills through interactive challenges"
-    ],
+
+    diagrams: keyConcepts.slice(0, 3).map((concept, index) => {
+      const diagramTypes = ['flowchart', 'concept-map', 'process-diagram'];
+      const diagramType = diagramTypes[index % diagramTypes.length];
+
+      if (diagramType === 'flowchart') {
+        return {
+          topic: `${concept} Process Flow`,
+          type: 'flowchart',
+          description: `Visual flowchart showing how ${concept} works step-by-step`,
+          diagramCode: `graph TD; A[Start: ${concept}] --> B[Analysis Phase]; B --> C[Implementation]; C --> D[Evaluation]; D --> E[Optimization]; E --> F[Results];`,
+          altText: `Flowchart diagram illustrating the ${concept} process from start to results`
+        };
+      } else if (diagramType === 'concept-map') {
+        return {
+          topic: `${concept} Framework`,
+          type: 'concept-map',
+          description: `Mind map showing the relationships and components within ${concept}`,
+          diagramCode: `mindmap\n  root((${concept}))\n    Core Elements\n      Element A\n      Element B\n    Applications\n      Use Case 1\n      Use Case 2\n    Benefits\n      Benefit A\n      Benefit B`,
+          altText: `Concept map displaying the framework and relationships of ${concept}`
+        };
+      } else {
+        return {
+          topic: `${concept} Implementation Steps`,
+          type: 'process-diagram',
+          description: `Step-by-step process diagram for implementing ${concept}`,
+          diagramCode: `sequenceDiagram\n    participant User\n    participant System\n    participant ${concept}\n    User->>System: Initiate ${concept}\n    System->>${concept}: Process Request\n    ${concept}->>System: Return Results\n    System->>User: Display Outcome`,
+          altText: `Process diagram showing the implementation sequence for ${concept}`
+        };
+      }
+    }),
+
+    video: {
+      title: `Journey Through ${keyConcepts[0] || 'Learning'}`,
+      visualStyle: "2D cartoon style with vibrant colors, friendly characters, and smooth animations",
+      totalDuration: "4-5 minutes",
+      scenes: [
+        {
+          sceneNumber: 1,
+          duration: "45 seconds",
+          narration: `Welcome to your learning adventure! Today, we'll explore the fascinating world of ${keyConcepts[0] || 'essential concepts'}. Think of this as your personal guide through complex ideas made simple.`,
+          visuals: "Animated character (friendly mentor) appears in a colorful digital landscape with floating concept bubbles",
+          characters: ["Wise mentor character with welcoming expression"],
+          environment: "Bright, welcoming digital space with animated knowledge symbols",
+          transitions: "Gentle zoom-in from cosmic view to personal learning space"
+        },
+        {
+          sceneNumber: 2,
+          duration: "90 seconds",
+          narration: `Let's start with the foundation. ${keyConcepts[0] || 'Your first concept'} is like the building blocks of a house - everything else depends on understanding this well. Watch how it connects to real-world applications.`,
+          visuals: "Animated building blocks forming structures, with smooth transitions showing connections between concepts",
+          characters: ["Mentor character demonstrating with animated examples"],
+          environment: "Interactive workspace where concepts build upon each other",
+          transitions: "Smooth morphing from abstract concepts to concrete examples"
+        },
+        {
+          sceneNumber: 3,
+          duration: "90 seconds",
+          narration: `Now that you understand the basics, let's see how ${keyConcepts[1] || 'advanced concepts'} build upon what you've learned. Notice how everything connects - that's the beauty of knowledge!`,
+          visuals: "Complex network of connections lighting up, showing relationships between different concepts",
+          characters: ["Mentor guiding through connection pathways"],
+          environment: "Dynamic network visualization with glowing connection points",
+          transitions: "Flowing connections that pulse with energy as relationships are revealed"
+        },
+        {
+          sceneNumber: 4,
+          duration: "60 seconds",
+          narration: `Ready for the challenge? You'll now apply everything you've learned in our interactive quiz. Remember, each question is an opportunity to solidify your understanding. Good luck!`,
+          visuals: "Transformation into game environment with quest elements and achievement indicators",
+          characters: ["Mentor transforming into game guide with encouraging gestures"],
+          environment: "Gamified quiz arena with treasure chests and progress indicators",
+          transitions: "Exciting transformation with sparkles and upbeat music cues"
+        }
+      ]
+    },
     mediaContent: mediaSearchResult.totalFound > 0 ? {
       ...(mediaSearchResult.images[0] && {
         headerImage: {

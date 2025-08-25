@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Brain, Upload, Gamepad2, Trophy, Users, BookOpen, ArrowRight, Sparkles, Target, Clock } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AnimatedProcessDiagram } from '../components/AnimatedProcessDiagram';
 

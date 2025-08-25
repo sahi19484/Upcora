@@ -161,8 +161,6 @@ export interface ExtractedContent {
 }
 
 export async function extractTextFromFile(buffer: Buffer, fileName: string, mimeType: string): Promise<ExtractedContent> {
-  await loadDependencies();
-
   let text = '';
   let pages: number | undefined;
 
@@ -170,27 +168,10 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
     switch (mimeType) {
       case 'application/pdf':
         try {
-          // Check if pdf library is available from dependency loading
-          if (!pdf) {
-            try {
-              // Fallback: try direct import
-              const pdfParse = await import('pdf-parse');
-              const pdfFunction = pdfParse.default || pdfParse;
-
-              const pdfData = await pdfFunction(buffer);
-              text = pdfData.text || '';
-              pages = pdfData.numpages;
-            } catch (importError) {
-              // If import fails, try alternative PDF processing
-              console.warn('pdf-parse import failed:', importError);
-              throw new Error('PDF library not available. Please try converting your PDF to text format.');
-            }
-          } else {
-            // Use pre-loaded pdf library
-            const pdfData = await pdf(buffer);
-            text = pdfData.text || '';
-            pages = pdfData.numpages;
-          }
+          const pdfParse = await getPdfParser();
+          const pdfData = await pdfParse(buffer);
+          text = pdfData.text || '';
+          pages = pdfData.numpages;
 
           if (!text.trim()) {
             throw new Error('No text content found in PDF. The PDF may be image-based or protected. Please try saving as a text file.');
@@ -215,10 +196,8 @@ export async function extractTextFromFile(buffer: Buffer, fileName: string, mime
 
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
-        if (!mammoth) {
-          throw new Error('Word document processing library not available. Please try uploading a text file.');
-        }
         try {
+          const mammoth = await getMammoth();
           const docxResult = await mammoth.extractRawText({ buffer });
           text = docxResult.value || '';
         } catch (wordError) {

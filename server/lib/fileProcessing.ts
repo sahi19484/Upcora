@@ -9,56 +9,33 @@ declare module 'node-pptx' {
   export default { Presentation };
 }
 
-// Lazy loading of dependencies to avoid bundling issues
-let pdf: any;
-let mammoth: any;
-let jszip: any;
-
-async function loadDependencies() {
+// Import libraries directly - they're in dependencies so should be available
+async function getPdfParser() {
   try {
-    if (!pdf) {
-      // Import pdf-parse with safer approach
-      try {
-        const pdfModule = await import('pdf-parse');
-        // Handle different export patterns
-        if (typeof pdfModule.default === 'function') {
-          pdf = pdfModule.default;
-        } else if (typeof pdfModule === 'function') {
-          pdf = pdfModule;
-        } else if (pdfModule.default && typeof pdfModule.default.default === 'function') {
-          pdf = pdfModule.default.default;
-        } else {
-          console.warn('PDF module has unexpected structure:', Object.keys(pdfModule));
-          pdf = null;
-        }
-
-        if (pdf) {
-          console.log('PDF parsing library loaded successfully');
-        }
-      } catch (pdfError) {
-        console.warn('PDF parsing unavailable:', pdfError.message);
-        pdf = null;
-      }
-    }
-    if (!mammoth) {
-      try {
-        mammoth = await import('mammoth');
-      } catch (mammothError) {
-        console.warn('Word document parsing unavailable:', mammothError.message);
-        mammoth = null;
-      }
-    }
-    if (!jszip) {
-      try {
-        const jszipModule = await import('jszip');
-        jszip = jszipModule.default || jszipModule;
-      } catch (jszipError) {
-        console.warn('PowerPoint parsing unavailable:', jszipError.message);
-        jszip = null;
-      }
-    }
+    const pdfParse = await import('pdf-parse');
+    return pdfParse.default || pdfParse;
   } catch (error) {
-    console.error('Error loading file processing dependencies:', error);
+    console.error('Failed to load pdf-parse:', error);
+    throw new Error('PDF library not available. Please try converting your PDF to text format.');
+  }
+}
+
+async function getMammoth() {
+  try {
+    return await import('mammoth');
+  } catch (error) {
+    console.error('Failed to load mammoth:', error);
+    throw new Error('Word document processing library not available. Please try uploading a text file.');
+  }
+}
+
+async function getJSZip() {
+  try {
+    const jszipModule = await import('jszip');
+    return jszipModule.default || jszipModule;
+  } catch (error) {
+    console.error('Failed to load jszip:', error);
+    throw new Error('PowerPoint processing library not available. Please try uploading a text file.');
   }
 }
 

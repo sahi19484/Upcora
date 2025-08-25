@@ -67,24 +67,98 @@ export function VisualDiagrams({
     }
   };
 
-  const renderMermaidDiagram = (code: string, topic: string) => {
-    // For demo purposes, we'll show a structured representation
-    // In production, integrate with Mermaid.js or similar
-    return (
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-8 min-h-[400px] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="text-6xl">📊</div>
-          <h3 className="text-xl font-semibold text-gray-800">{topic}</h3>
-          <div className="bg-gray-50 rounded-lg p-4 max-w-lg">
-            <p className="text-sm text-gray-600 mb-2">Diagram Structure:</p>
-            <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">
-              {code}
-            </pre>
+  // Initialize mermaid once
+  useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "default",
+      securityLevel: "loose",
+      fontFamily: "Inter, sans-serif",
+      fontSize: 14,
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+      },
+      sequence: {
+        useMaxWidth: true,
+      },
+      journey: {
+        useMaxWidth: true,
+      },
+    });
+  }, []);
+
+  const MermaidDiagram = ({ code, id }: { code: string; id: string }) => {
+    const diagramRef = useRef<HTMLDivElement>(null);
+    const [diagramSvg, setDiagramSvg] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+      const renderDiagram = async () => {
+        if (!diagramRef.current || !code) return;
+
+        setIsLoading(true);
+        setError("");
+
+        try {
+          // Clear previous content
+          diagramRef.current.innerHTML = "";
+
+          // Generate unique ID for this diagram
+          const diagramId = `mermaid-${id}-${Date.now()}`;
+
+          // Render the diagram
+          const { svg } = await mermaid.render(diagramId, code);
+          setDiagramSvg(svg);
+          setIsLoading(false);
+        } catch (err) {
+          console.error("Mermaid rendering error:", err);
+          setError("Failed to render diagram");
+          setIsLoading(false);
+        }
+      };
+
+      renderDiagram();
+    }, [code, id]);
+
+    if (error) {
+      return (
+        <div className="bg-red-50 border-2 border-red-200 rounded-lg p-8 min-h-[400px] flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="text-6xl">⚠️</div>
+            <h3 className="text-xl font-semibold text-red-800">Diagram Error</h3>
+            <p className="text-red-600">{error}</p>
+            <div className="bg-red-100 rounded-lg p-4 max-w-lg">
+              <p className="text-sm text-red-700 mb-2">Original Code:</p>
+              <pre className="text-xs text-red-600 whitespace-pre-wrap font-mono">
+                {code}
+              </pre>
+            </div>
           </div>
-          <p className="text-sm text-gray-500">
-            Interactive diagram visualization would render here
-          </p>
         </div>
+      );
+    }
+
+    if (isLoading) {
+      return (
+        <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-8 min-h-[400px] flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="animate-spin text-6xl">⚙️</div>
+            <h3 className="text-xl font-semibold text-gray-800">Loading Diagram...</h3>
+            <p className="text-gray-600">Rendering interactive visualization</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-8 min-h-[400px] overflow-auto">
+        <div
+          ref={diagramRef}
+          className="mermaid-diagram flex justify-center items-center"
+          dangerouslySetInnerHTML={{ __html: diagramSvg }}
+        />
       </div>
     );
   };

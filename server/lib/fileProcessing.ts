@@ -54,12 +54,10 @@ export const ALLOWED_MIME_TYPES = [
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 async function extractTextFromPPTX(buffer: Buffer): Promise<string> {
-  if (!jszip) {
-    throw new Error('PowerPoint processing library not available');
-  }
+  const JSZip = await getJSZip();
 
   try {
-    const zip = new jszip();
+    const zip = new JSZip();
     const pptxData = await zip.loadAsync(buffer);
 
     let extractedText = '';

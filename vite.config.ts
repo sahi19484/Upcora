@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    exclude: ['pdf-parse', 'mammoth']
+    exclude: ['pdf-parse', 'mammoth', '@prisma/client']
   },
   ssr: {
     noExternal: []

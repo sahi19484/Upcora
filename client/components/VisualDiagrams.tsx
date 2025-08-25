@@ -359,10 +359,10 @@ export function VisualDiagrams({
               </button>
             </div>
             <div className="p-6">
-              {renderMermaidDiagram(
-                currentDiagramData.diagramCode,
-                currentDiagramData.topic,
-              )}
+              <MermaidDiagram
+                code={currentDiagramData.diagramCode}
+                id={`fullscreen-${currentDiagram}`}
+              />
             </div>
           </div>
         </div>

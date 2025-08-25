@@ -199,11 +199,6 @@ export default function Index() {
         </div>
       </footer>
 
-      {/* Demo Modal */}
-      <DemoModal
-        isOpen={demoModal}
-        onClose={() => setDemoModal(false)}
-      />
     </div>
   );
 }

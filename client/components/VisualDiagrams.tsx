@@ -127,7 +127,9 @@ export function VisualDiagrams({
         <div className="bg-red-50 border-2 border-red-200 rounded-lg p-8 min-h-[400px] flex items-center justify-center">
           <div className="text-center space-y-4">
             <div className="text-6xl">⚠️</div>
-            <h3 className="text-xl font-semibold text-red-800">Diagram Error</h3>
+            <h3 className="text-xl font-semibold text-red-800">
+              Diagram Error
+            </h3>
             <p className="text-red-600">{error}</p>
             <div className="bg-red-100 rounded-lg p-4 max-w-lg">
               <p className="text-sm text-red-700 mb-2">Original Code:</p>
@@ -145,7 +147,9 @@ export function VisualDiagrams({
         <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-8 min-h-[400px] flex items-center justify-center">
           <div className="text-center space-y-4">
             <div className="animate-spin text-6xl">⚙️</div>
-            <h3 className="text-xl font-semibold text-gray-800">Loading Diagram...</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Loading Diagram...
+            </h3>
             <p className="text-gray-600">Rendering interactive visualization</p>
           </div>
         </div>

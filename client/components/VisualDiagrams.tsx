@@ -235,10 +235,10 @@ export function VisualDiagrams({
 
         {/* Diagram Content */}
         <div className="p-6">
-          {renderMermaidDiagram(
-            currentDiagramData.diagramCode,
-            currentDiagramData.topic,
-          )}
+          <MermaidDiagram
+            code={currentDiagramData.diagramCode}
+            id={`main-${currentDiagram}`}
+          />
         </div>
 
         {/* Diagram Footer */}

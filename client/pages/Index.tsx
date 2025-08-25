@@ -3,7 +3,6 @@ import { Brain, Upload, Gamepad2, Trophy, Users, BookOpen, ArrowRight, Sparkles,
 import { Link } from 'react-router-dom';
 
 export default function Index() {
-  const [demoModal, setDemoModal] = useState(false);
 
   const features = [
     {

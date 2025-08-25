@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { AnimatedProcessDiagram } from '../components/AnimatedProcessDiagram';
+import React, { useState } from "react";
+import { BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AnimatedProcessDiagram } from "../components/AnimatedProcessDiagram";
 
 export default function Index() {
-
-
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -18,7 +16,7 @@ export default function Index() {
               </div>
               <span className="text-xl font-bold text-gray-900">Upcora</span>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <Link
                 to="/upload"
@@ -38,15 +36,17 @@ export default function Index() {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Transform Any
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                {" "}Study Material{" "}
+                {" "}
+                Study Material{" "}
               </span>
               Into Interactive Games
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Upload your PDFs, Word documents, PowerPoint presentations, or URLs and watch AI create engaging roleplay simulations
-              and quizzes that make learning fun, memorable, and effective.
+              Upload your PDFs, Word documents, PowerPoint presentations, or
+              URLs and watch AI create engaging roleplay simulations and quizzes
+              that make learning fun, memorable, and effective.
             </p>
-            
+
             <Link
               to="/upload"
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
@@ -56,7 +56,7 @@ export default function Index() {
             </Link>
           </div>
         </div>
-        
+
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-8 right-16 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-pulse"></div>
@@ -64,7 +64,6 @@ export default function Index() {
           <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-green-200 rounded-full opacity-20 animate-pulse delay-500"></div>
         </div>
       </section>
-
 
       {/* Interactive Process Diagram Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
@@ -81,10 +80,10 @@ export default function Index() {
               See Upcora In Action
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Watch how a simple PDF becomes an engaging learning experience with roleplay scenarios and interactive quizzes.
+              Watch how a simple PDF becomes an engaging learning experience
+              with roleplay scenarios and interactive quizzes.
             </p>
           </div>
-
         </div>
       </section>
 
@@ -95,9 +94,10 @@ export default function Index() {
             Ready to Transform Your Learning?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already using Upcora to make studying more engaging and effective.
+            Join thousands of learners who are already using Upcora to make
+            studying more engaging and effective.
           </p>
-          
+
           <Link
             to="/upload"
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
@@ -127,7 +127,6 @@ export default function Index() {
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

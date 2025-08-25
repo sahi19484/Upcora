@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Brain, Upload, Gamepad2, Trophy, Users, BookOpen, ArrowRight, Sparkles, Target, Clock } from 'lucide-react';
-import { DemoModal } from '../components/DemoModal';
 import { Link } from 'react-router-dom';
 
 export default function Index() {

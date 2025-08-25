@@ -27,12 +27,6 @@ export default function Index() {
     }
   ];
 
-  const stats = [
-    { label: "Learning Games Created", value: "10,000+", icon: <Target className="w-5 h-5" /> },
-    { label: "Students Engaged", value: "50,000+", icon: <Users className="w-5 h-5" /> },
-    { label: "Average Engagement", value: "94%", icon: <Sparkles className="w-5 h-5" /> },
-    { label: "Time Saved", value: "1M+ hours", icon: <Clock className="w-5 h-5" /> }
-  ];
 
   return (
     <div className="min-h-screen bg-white">

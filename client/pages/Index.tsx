@@ -5,29 +5,6 @@ import { AnimatedProcessDiagram } from '../components/AnimatedProcessDiagram';
 
 export default function Index() {
 
-  const features = [
-    {
-      icon: <Upload className="w-8 h-8 text-blue-600" />,
-      title: "Easy Upload",
-      description: "Drag & drop your PDFs, Word documents, PowerPoint presentations, or paste URLs. We'll extract the key content instantly."
-    },
-    {
-      icon: <Brain className="w-8 h-8 text-purple-600" />,
-      title: "AI-Powered Processing",
-      description: "Our AI analyzes your content and creates personalized learning experiences tailored to your material."
-    },
-    {
-      icon: <Gamepad2 className="w-8 h-8 text-green-600" />,
-      title: "Interactive Games",
-      description: "Engage with roleplay simulations and creative quizzes that make learning fun and memorable."
-    },
-    {
-      icon: <Trophy className="w-8 h-8 text-yellow-600" />,
-      title: "Gamified Learning",
-      description: "Earn XP, unlock badges, and level up as you master new concepts through interactive gameplay."
-    }
-  ];
-
 
   return (
     <div className="min-h-screen bg-white">
